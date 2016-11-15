@@ -24,8 +24,9 @@ namespace KitchenResponsible.Controllers.Repositories
             employees = GetEmployees();
         }
 
-        public ResponsibleForWeek GetEmployeeForWeek(ushort week)
+        public ResponsibleForWeek GetEmployeeForWeek()
         {
+            var week = Week.GetIso8601WeekOfYear(DateTime.UtcNow);
             if (currentWeek.Week == week)
             {
                 return currentWeek;

@@ -9,17 +9,16 @@ namespace KitchenResponsible.Controllers
 {
     public class HomeController : Controller
     {
-        static readonly IEmployeeService s_employeeServiceRepo;
+        readonly IEmployeeService employeeService;
 
-        static HomeController()
+        public HomeController (IEmployeeService employeeService)
         {
-            s_employeeServiceRepo = new FileBasedEmployeeService();
+            this.employeeService = employeeService;
         }
 
         public IActionResult Index()
         {
-            // TODO: Finn uke basert på denne dato
-            var employeeForWeek = s_employeeServiceRepo.GetEmployeeForWeek(46);
+            var employeeForWeek = employeeService.GetEmployeeForWeek();
             ViewData["Week"] = employeeForWeek.Week;
             ViewData["Responsible"] = employeeForWeek.Responsible;
             ViewData["OnDeck"] = employeeForWeek.OnDeck;

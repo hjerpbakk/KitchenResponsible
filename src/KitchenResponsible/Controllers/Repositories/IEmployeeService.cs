@@ -2,6 +2,6 @@
 {
     public interface IEmployeeService
     {
-        ResponsibleForWeek GetEmployeeForWeek(ushort week);
+        ResponsibleForWeek GetEmployeeForWeek();
     }
 }
