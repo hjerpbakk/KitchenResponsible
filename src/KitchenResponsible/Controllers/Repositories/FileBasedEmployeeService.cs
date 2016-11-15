@@ -2,38 +2,48 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Options;
 
 namespace KitchenResponsible.Controllers.Repositories
 {
     public class FileBasedEmployeeService : IEmployeeService
     {
         const char SplitChar = ';';
-        const string Path = "/Users/sankra/Projects/KitchenResponsible/src/KitchenResponsible/";
-        const string EmployeesPath = Path + "Employees.txt";
-        const string CurrentWeekPath = Path + "CurrentWeek.txt";
+        static string employeesPath;
+        static string currentWeekPath;
 
         static readonly Random random;
 
-        private static ResponsibleForWeek currentWeek;
-        private static List<Employee> employees;
+        private static ResponsibleForWeek? currentWeek;
+        private static List<Employee> employees;      
 
-        static FileBasedEmployeeService()
-        {
+        static FileBasedEmployeeService() {
             random = new Random();
-            currentWeek = GetCurrentWeek();
-            employees = GetEmployees();
+        }
+
+        public FileBasedEmployeeService(IOptions<Paths> paths) {
+            if (employeesPath == null) {
+                employeesPath = Path.Combine(paths.Value.FilePath + "Employees.txt");
+            }
+
+            if (currentWeekPath == null) {
+                currentWeekPath = Path.Combine(paths.Value.FilePath + "CurrentWeek.txt");
+            }
+            
+            if (!currentWeek.HasValue) {
+                currentWeek = GetCurrentWeek();
+            }
         }
 
         public ResponsibleForWeek GetEmployeeForWeek()
-        {
+        {           
             var week = Week.GetIso8601WeekOfYear(DateTime.UtcNow);
-            if (currentWeek.Week == week)
-            {
-                return currentWeek;
+            if (currentWeek.Value.Week == week) {
+                return currentWeek.Value;
             }
 
             employees = GetEmployees();
-            var candidates = employees.Where(emp => emp.WeekResponsible == currentWeek.Week || emp.WeekResponsible == 0).
+            var candidates = employees.Where(emp => emp.WeekResponsible == currentWeek.Value.Week || emp.WeekResponsible == 0).
                 OrderBy(emp => random.NextDouble()).
                 ToArray();
             var highestWeek = GetHighestWeek();
@@ -48,12 +58,12 @@ namespace KitchenResponsible.Controllers.Repositories
 
             WriteEmployees();
             SetCurrentWeek(responsible.Name, onDeck.Name);
-            return currentWeek;
+            return currentWeek.Value;
         }
 
         private static ResponsibleForWeek GetCurrentWeek()
         {
-            var lines = File.ReadAllLines(CurrentWeekPath);
+            var lines = File.ReadAllLines(currentWeekPath);
             var weekNumber = ushort.Parse(lines[0]);
             var name = lines[1];
             var onDeck = lines[2];
@@ -62,7 +72,7 @@ namespace KitchenResponsible.Controllers.Repositories
 
         private static List<Employee> GetEmployees()
         {
-            var lines = File.ReadAllLines(EmployeesPath);
+            var lines = File.ReadAllLines(employeesPath);
             var employeesFromDisk = new List<Employee>(lines.Length);
             foreach (var line in lines)
             {
@@ -111,13 +121,13 @@ namespace KitchenResponsible.Controllers.Repositories
 
         private static void SetCurrentWeek(string responsible, string onDeck)
         {
-            var newWeekNumber = (ushort)(currentWeek.Week + 1);
+            var newWeekNumber = (ushort)(currentWeek.Value.Week + 1);
             currentWeek = new ResponsibleForWeek(newWeekNumber, responsible, onDeck);
             var lines = new string[3];
-            lines[0] = currentWeek.Week.ToString();
-            lines[1] = currentWeek.Responsible;
-            lines[2] = currentWeek.OnDeck;
-            File.WriteAllLines(CurrentWeekPath, lines);
+            lines[0] = currentWeek.Value.Week.ToString();
+            lines[1] = currentWeek.Value.Responsible;
+            lines[2] = currentWeek.Value.OnDeck;
+            File.WriteAllLines(currentWeekPath, lines);
         }
 
         private static void WriteEmployees()
@@ -129,7 +139,7 @@ namespace KitchenResponsible.Controllers.Repositories
                 lines[i] = $"{employee.WeekResponsible}{SplitChar}{employee.Name}";
             }
 
-            File.WriteAllLines(EmployeesPath, lines);
+            File.WriteAllLines(employeesPath, lines);
         }
     }
 }

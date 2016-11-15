@@ -39,6 +39,8 @@ namespace KitchenResponsible
             
             services.AddMvc();
 
+            services.Configure<Paths>(options => Configuration.GetSection("Paths").Bind(options));
+
             services.AddTransient<IEmployeeService, FileBasedEmployeeService>();
         }
 
