@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KitchenResponsible.Controllers.Repositories;
+using KitchenResponsible.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -41,7 +41,7 @@ namespace KitchenResponsible
 
             services.Configure<Paths>(options => Configuration.GetSection("Paths").Bind(options));
 
-            services.AddTransient<IEmployeeService, FileBasedEmployeeService>();
+            services.AddSingleton<IEmployeeService, FileBasedEmployeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

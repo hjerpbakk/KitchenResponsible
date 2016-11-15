@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace KitchenResponsible.Controllers.Repositories
+namespace KitchenResponsible.Model
 {
     public struct Week
     {

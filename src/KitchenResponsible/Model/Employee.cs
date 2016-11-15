@@ -1,4 +1,4 @@
-﻿namespace KitchenResponsible.Controllers
+﻿namespace KitchenResponsible.Model
 {
     public class Employee
     {

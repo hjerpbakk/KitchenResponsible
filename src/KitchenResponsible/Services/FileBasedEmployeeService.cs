@@ -3,8 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Options;
+using KitchenResponsible.Model;
 
-namespace KitchenResponsible.Controllers.Repositories
+namespace KitchenResponsible.Services
 {
     public class FileBasedEmployeeService : IEmployeeService
     {
@@ -17,13 +18,16 @@ namespace KitchenResponsible.Controllers.Repositories
         private static ResponsibleForWeek? currentWeek;
         private static List<Employee> employees;      
 
+        // TODO: Bort fra static, utnytt at det er en singleton
+
         static FileBasedEmployeeService() {
             random = new Random();
-        }
+        }       
 
         public FileBasedEmployeeService(IOptions<Paths> paths) {
             if (employeesPath == null) {
                 employeesPath = Path.Combine(paths.Value.FilePath + "Employees.txt");
+                employees = GetEmployees();
             }
 
             if (currentWeekPath == null) {
@@ -33,6 +37,10 @@ namespace KitchenResponsible.Controllers.Repositories
             if (!currentWeek.HasValue) {
                 currentWeek = GetCurrentWeek();
             }
+        }
+
+        public IEnumerable<string> Get() {
+            return employees.Select(emp => emp.Name);
         }
 
         public ResponsibleForWeek GetEmployeeForWeek()

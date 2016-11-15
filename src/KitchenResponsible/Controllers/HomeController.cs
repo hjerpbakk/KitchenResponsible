@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KitchenResponsible.Controllers.Repositories;
+using KitchenResponsible.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitchenResponsible.Controllers
