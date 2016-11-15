@@ -8,7 +8,7 @@ namespace KitchenResponsible.Controllers.Repositories
     public class FileBasedEmployeeService : IEmployeeService
     {
         const char SplitChar = ';';
-        const string Path = "C:\\Users\\roh.DIPS-AD\\Dropbox\\KPI\\";
+        const string Path = "/Users/sankra/Projects/KitchenResponsible/src/KitchenResponsible/";
         const string EmployeesPath = Path + "Employees.txt";
         const string CurrentWeekPath = Path + "CurrentWeek.txt";
 

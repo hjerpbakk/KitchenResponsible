@@ -35,7 +35,7 @@ namespace KitchenResponsible
         {
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-
+            
             services.AddMvc();
         }
 
