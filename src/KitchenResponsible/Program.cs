@@ -19,6 +19,8 @@ namespace KitchenResponsible
                 .Build();
 
             host.Run();
+
+            // How to run: SET ASPNETCORE_URLS=https://*:5123 && dotnet run
         }
     }
 }
