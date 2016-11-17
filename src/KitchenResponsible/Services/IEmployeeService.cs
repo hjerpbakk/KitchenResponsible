@@ -6,6 +6,6 @@ namespace KitchenResponsible.Services
     public interface IEmployeeService
     {
         ResponsibleForWeek GetEmployeeForWeek();
-        IEnumerable<string> Get();
+        IEnumerable<Employee> Get();
     }
 }

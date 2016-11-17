@@ -39,8 +39,8 @@ namespace KitchenResponsible.Services
             }
         }
 
-        public IEnumerable<string> Get() {
-            return employees.Select(emp => emp.Name);
+        public IEnumerable<Employee> Get() {
+            return employees;
         }
 
         public ResponsibleForWeek GetEmployeeForWeek()
@@ -65,7 +65,7 @@ namespace KitchenResponsible.Services
             var onDeck = employees.Single(emp => emp.WeekResponsible == GetNextWeek(week));
 
             WriteEmployees();
-            SetCurrentWeek(responsible.Name, onDeck.Name);
+            SetCurrentWeek(responsible.Nick, onDeck.Nick);
             return currentWeek.Value;
         }
 
@@ -87,7 +87,7 @@ namespace KitchenResponsible.Services
                 var splittedLine = line.Split(SplitChar);
                 var weekResponsible = ushort.Parse(splittedLine[0]);
                 var name = splittedLine[1].Trim();
-                employeesFromDisk.Add(new Employee(weekResponsible, name));
+                employeesFromDisk.Add(new Employee(weekResponsible, name, "y0l0", name));
             }
 
             return employeesFromDisk;
@@ -144,7 +144,7 @@ namespace KitchenResponsible.Services
             for (var i = 0; i < employees.Count; i++)
             {
                 var employee = employees[i];
-                lines[i] = $"{employee.WeekResponsible}{SplitChar}{employee.Name}";
+                lines[i] = $"{employee.WeekResponsible}{SplitChar}{employee.Nick}";
             }
 
             File.WriteAllLines(employeesPath, lines);
