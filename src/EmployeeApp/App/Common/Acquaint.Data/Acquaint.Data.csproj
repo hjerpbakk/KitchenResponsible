@@ -37,7 +37,7 @@
     <Compile Include="SeedData.cs" />
     <Compile Include="SyncHandler.cs" />
     <Compile Include="FilesystemOnlyAcquaintanceDataSource.cs" />
-    <Compile Include="EmployeeService.cs" />
+    <Compile Include="TeamMemberService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace Acquaint.Native.iOS
 		/// Update the cell's child views' values and presentation.
 		/// </summary>
 		/// <param name="acquaintance">Acquaintance.</param>
-		public void Update(Acquaintance acquaintance)
+		public void Update(TeamMemberLite acquaintance)
 		{
 			// set disclousure indicator accessory for the cell
 			Accessory = UITableViewCellAccessory.DisclosureIndicator;

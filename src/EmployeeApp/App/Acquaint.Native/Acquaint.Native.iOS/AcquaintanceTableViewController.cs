@@ -142,7 +142,7 @@ namespace Acquaint.Native.iOS
 				if (acquaintanceDetailViewController != null && TableView.Source != null)
 				{
 					// set the acquaintance on the view controller
-					acquaintanceDetailViewController.Acquaintance = ((AcquaintanceTableViewSource)TableView.Source).Acquaintances[itemIndex];
+					acquaintanceDetailViewController.TeamMemberLite = ((AcquaintanceTableViewSource)TableView.Source).Acquaintances[itemIndex];
 				}
 				break;
 			}
@@ -191,7 +191,7 @@ namespace Acquaint.Native.iOS
 				return null;
 
 			// set the acquaintance on the view controller
-			detailViewController.Acquaintance = _AcquaintanceTableViewSource.Acquaintances[indexPath.Row];
+			detailViewController.TeamMemberLite = _AcquaintanceTableViewSource.Acquaintances[indexPath.Row];
 
 			// set the frame on the screen that will NOT be blurred out during the preview "peek"
 			previewingContext.SourceRect = cell.Frame;

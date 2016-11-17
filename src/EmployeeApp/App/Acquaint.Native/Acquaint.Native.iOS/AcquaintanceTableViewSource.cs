@@ -22,7 +22,7 @@ namespace Acquaint.Native.iOS
 		/// Gets the acquaintances.
 		/// </summary>
 		/// <value>The acquaintances.</value>
-		public List<Acquaintance> Acquaintances { get; private set; }
+		public List<TeamMemberLite> Acquaintances { get; private set; }
 
 		public AcquaintanceTableViewSource()
 		{
@@ -43,7 +43,7 @@ namespace Acquaint.Native.iOS
 			SetDataSource();
 
 			//Acquaintances = (await _DataSource.GetItems()).ToList();
-			Acquaintances = (await new EmployeeService().GetItems()).ToList();
+			Acquaintances = (await new TeamMemberService().Get()).ToList();
 		}
 
 		#region implemented abstract members of UITableViewSource

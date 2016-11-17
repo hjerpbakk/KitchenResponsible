@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Options;
 using KitchenResponsible.Model;
+using System.Threading;
 
 namespace KitchenResponsible.Services
 {
@@ -40,10 +41,12 @@ namespace KitchenResponsible.Services
         }
 
         public IEnumerable<Employee> Get() {
+            Thread.Sleep(1000);
             return employees;
         }
 
         public Employee Get(int id) {
+            Thread.Sleep(2000);
             return employees[id];
         }
 

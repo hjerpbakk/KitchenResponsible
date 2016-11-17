@@ -1,5 +1,6 @@
 using System;
 using Acquaint.Abstractions;
+using Acquaint.Data;
 using Acquaint.Models;
 using Acquaint.Util;
 using CoreAnimation;
@@ -15,47 +16,47 @@ using Plugin.ExternalMaps.Abstractions;
 using Plugin.Messaging;
 using UIKit;
 
-namespace Acquaint.Native.iOS
-{
+namespace Acquaint.Native.iOS {
 	/// <summary>
 	/// Acquaintance detail view controller. The layout for this view controller is defined almost entirely in Main.storyboard.
 	/// </summary>
-	public partial class AcquaintanceDetailViewController : UIViewController
-	{
+	public partial class AcquaintanceDetailViewController : UIViewController {
 		/// <summary>
 		/// The data source.
 		/// </summary>
 		IDataSource<Acquaintance> _DataSource;
 
-		public Acquaintance Acquaintance { get; set; }
-
 		UIBarButtonItem DeleteBarButtonItem;
 
+		TeamMember teamMember;
+
 		readonly CLGeocoder _Geocoder;
+		readonly TeamMemberService teamMemberService;
 
 		// This constructor signature is required, for marshalling between the managed and native instances of this class.
-		public AcquaintanceDetailViewController(IntPtr handle) : base(handle)
-		{
+		public AcquaintanceDetailViewController(IntPtr handle) : base(handle) {
 			_DataSource = ServiceLocator.Current.GetInstance<IDataSource<Acquaintance>>();
 			_Geocoder = new CLGeocoder();
+			teamMemberService = new TeamMemberService();
 		}
+
+		public TeamMemberLite TeamMemberLite { private get; set; }
 
 		// This overridden method will be called after the AcquaintanceDetailViewController has been instantiated and loaded into memory,
 		// but before the view hierarchy is rendered to the device screen.
 		// The "async" keyword is added here to the override in order to allow other awaited async method calls inside the override to be called ascynchronously.
-		public override async void ViewWillAppear(bool animated)
-		{
-			if (Acquaintance != null)
-			{
+		public override async void ViewWillAppear(bool animated) {
+			teamMember = await teamMemberService.Get(TeamMemberLite.Id);
+			if (teamMember != null) {
 				// set the title and label text properties
-				Title = Acquaintance.DisplayName;
-				CompanyNameLabel.Text = Acquaintance.Company;
-				JobTitleLabel.Text = Acquaintance.JobTitle;
-				StreetLabel.Text = Acquaintance.Street;
-				CityLabel.Text = Acquaintance.City;
-				StateAndPostalLabel.Text = Acquaintance.StatePostal;
-				PhoneLabel.Text = Acquaintance.Phone;
-				EmailLabel.Text = Acquaintance.Email;
+				Title = TeamMemberLite.DisplayName;
+				CompanyNameLabel.Text = TeamMemberLite.Company;
+				JobTitleLabel.Text = TeamMemberLite.JobTitle;
+				StreetLabel.Text = teamMember.Street;
+				CityLabel.Text = teamMember.City;
+				StateAndPostalLabel.Text = teamMember.StatePostal;
+				PhoneLabel.Text = teamMember.Phone;
+				EmailLabel.Text = teamMember.Email;
 
 				// Set image views for user actions.
 				// The action for getting navigation directions is setup further down in this method, after the geocoding occurs.
@@ -63,23 +64,21 @@ namespace Acquaint.Native.iOS
 				SetupDialNumberAction();
 				SetupSendEmailAction();
 
-				 // use FFImageLoading library to asynchronously:
+				// use FFImageLoading library to asynchronously:
 				await ImageService
 					.Instance
-					.LoadUrl(Acquaintance.PhotoUrl, TimeSpan.FromHours(Settings.ImageCacheDurationHours)) 					// get the image from a URL
-					.LoadingPlaceholder("placeholderProfileImage.png") 	// specify a placeholder image
-					.Transform(new CircleTransformation()) 				// transform the image to a circle
+					.LoadUrl(teamMember.PhotoUrl, TimeSpan.FromHours(Settings.ImageCacheDurationHours))                   // get the image from a URL
+					.LoadingPlaceholder("placeholderProfileImage.png")  // specify a placeholder image
+					.Transform(new CircleTransformation())              // transform the image to a circle
 					.Error(e => System.Diagnostics.Debug.WriteLine(e.Message))
-					.IntoAsync(ProfilePhotoImageView); 					// load the image into the UIImageView
+					.IntoAsync(ProfilePhotoImageView);                  // load the image into the UIImageView
 
-				try
-				{
+				try {
 					// asynchronously geocode the address
-					var locations = await _Geocoder.GeocodeAddressAsync(Acquaintance.AddressString);
+					var locations = await _Geocoder.GeocodeAddressAsync(teamMember.AddressString);
 
 					// if we have at least one location
-					if (locations != null && locations.Length > 0)
-					{
+					if (locations != null && locations.Length > 0) {
 						var coord = locations[0].Location.Coordinate;
 
 						var span = new MKCoordinateSpan(MilesToLatitudeDegrees(20), MilesToLongitudeDegrees(20, coord.Latitude));
@@ -88,11 +87,9 @@ namespace Acquaint.Native.iOS
 						MapView.Region = new MKCoordinateRegion(coord, span);
 
 						// create a new pin for the map
-						var pin = new MKPointAnnotation()
-						{
-							Title = Acquaintance.DisplayName,
-							Coordinate = new CLLocationCoordinate2D()
-							{
+						var pin = new MKPointAnnotation() {
+							Title = TeamMemberLite.DisplayName,
+							Coordinate = new CLLocationCoordinate2D() {
 								Latitude = coord.Latitude,
 								Longitude = coord.Longitude
 							}
@@ -102,8 +99,7 @@ namespace Acquaint.Native.iOS
 						MapView.AddAnnotation(pin);
 
 						// add a top border to the MapView
-						MapView.Layer.AddSublayer(new CALayer()
-						{
+						MapView.Layer.AddSublayer(new CALayer() {
 							BackgroundColor = UIColor.LightGray.CGColor,
 							Frame = new CGRect(0, 0, MapView.Frame.Width, 1)
 						});
@@ -111,16 +107,13 @@ namespace Acquaint.Native.iOS
 						// setup fhe action for getting navigation directions
 						SetupGetDirectionsAction(coord.Latitude, coord.Longitude);
 					}
-				}
-				catch
-				{
+				} catch {
 					DisplayErrorAlertView("Geocoding Error", "Please make sure the address is valid and that you have a network connection.");
 				}
 			}
 		}
 
-		public override void ViewDidLoad()
-		{
+		public override void ViewDidLoad() {
 			base.ViewDidLoad();
 
 			// override the back button text for AcquaintanceEditViewController (the navigated-to view controller)
@@ -131,12 +124,11 @@ namespace Acquaint.Native.iOS
 			DeleteBarButtonItem.Clicked += DeleteBarButtonItemClicked;
 		}
 
-		void DeleteBarButtonItemClicked(object sender, EventArgs ea)
-		{
+		void DeleteBarButtonItemClicked(object sender, EventArgs ea) {
 			UIAlertController alert =
 				UIAlertController.Create(
 					"Delete?",
-					$"Are you sure you want to delete {Acquaintance.FirstName} {Acquaintance.LastName}?",
+					$"Are you sure you want to delete {TeamMemberLite.FirstName} {TeamMemberLite.LastName}?",
 					UIAlertControllerStyle.Alert);
 
 			// cancel button
@@ -144,9 +136,9 @@ namespace Acquaint.Native.iOS
 
 			// delete button
 			alert.AddAction(UIAlertAction.Create("Delete", UIAlertActionStyle.Destructive, async (action) => {
-				if (action != null)
-				{
-					await _DataSource.RemoveItem(Acquaintance);
+				if (action != null) {
+					// TODO: Implement
+					//await _DataSource.RemoveItem(Acquaintance);
 
 					NavigationController.PopViewController(true);
 				}
@@ -155,16 +147,15 @@ namespace Acquaint.Native.iOS
 			UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(alert, true, null);
 		}
 
-		public override void PrepareForSegue(UIStoryboardSegue segue, Foundation.NSObject sender)
-		{
+		public override void PrepareForSegue(UIStoryboardSegue segue, Foundation.NSObject sender) {
 			// get the destination viewcontroller from the segue
 			var acquaintanceEditViewController = segue.DestinationViewController as AcquaintanceEditViewController;
 
-			acquaintanceEditViewController.Acquaintance = Acquaintance;
+			// TODO: Implementer
+			//acquaintanceEditViewController.Acquaintance = Acquaintance;
 		}
 
-		void SetupGetDirectionsAction(double lat, double lon)
-		{
+		void SetupGetDirectionsAction(double lat, double lon) {
 			GetDirectionsImageView.Image = UIImage.FromBundle("directions");
 
 			// UIImageView doesn't accept touch events by default, so we have to explcitly enable user interaction
@@ -172,12 +163,11 @@ namespace Acquaint.Native.iOS
 
 			GetDirectionsImageView.AddGestureRecognizer(new UITapGestureRecognizer(async () => {
 				// we're using the External Maps plugin from James Montemagno here (included as a NuGet)
-				await CrossExternalMaps.Current.NavigateTo(Acquaintance.DisplayName, lat, lon, NavigationType.Driving);
+				await CrossExternalMaps.Current.NavigateTo(TeamMemberLite.DisplayName, lat, lon, NavigationType.Driving);
 			}));
 		}
 
-		void SetupSendMessageAction()
-		{
+		void SetupSendMessageAction() {
 			SendMessageImageView.Image = UIImage.FromBundle("message");
 
 			// UIImageView doesn't accept touch events by default, so we have to explcitly enable user interaction
@@ -187,14 +177,13 @@ namespace Acquaint.Native.iOS
 				// we're using the Messaging plugin from Carel Lotz here (included as a NuGet)
 				var smsTask = MessagingPlugin.SmsMessenger;
 				if (smsTask.CanSendSms && IsRealDevice)
-					smsTask.SendSms(Acquaintance.Phone, "");
+					smsTask.SendSms(teamMember.Phone, "");
 				else
 					DisplaySimulatorNotSupportedErrorAlertView("Messaging is not supported in the iOS simulator.");
 			}));
 		}
 
-		void SetupDialNumberAction()
-		{
+		void SetupDialNumberAction() {
 			DialNumberImageView.Image = UIImage.FromBundle("phone");
 
 			// UIImageView doesn't accept touch events by default, so we have to explcitly enable user interaction
@@ -204,14 +193,13 @@ namespace Acquaint.Native.iOS
 				// we're using the Messaging plugin from Carel Lotz here (included as a NuGet)
 				var phoneCallTask = MessagingPlugin.PhoneDialer;
 				if (phoneCallTask.CanMakePhoneCall && IsRealDevice)
-					phoneCallTask.MakePhoneCall(Acquaintance.Phone);
+					phoneCallTask.MakePhoneCall(teamMember.Phone);
 				else
 					DisplaySimulatorNotSupportedErrorAlertView("Phone calls are not supported in the iOS simulator.");
 			}));
 		}
 
-		void SetupSendEmailAction()
-		{
+		void SetupSendEmailAction() {
 			SendEmailImageView.Image = UIImage.FromBundle("email");
 
 			// UIImageView doesn't accept touch events by default, so we have to explcitly enable user interaction
@@ -221,19 +209,17 @@ namespace Acquaint.Native.iOS
 				// we're using the Messaging plugin from Carel Lotz here (included as a NuGet)
 				var emailTask = MessagingPlugin.EmailMessenger;
 				if (emailTask.CanSendEmail && IsRealDevice)
-					emailTask.SendEmail(Acquaintance.Email, "");
+					emailTask.SendEmail(teamMember.Email, "");
 				else
 					DisplaySimulatorNotSupportedErrorAlertView("Email composition is not supported in the iOS simulator.");
 			}));
 		}
 
-		void DisplaySimulatorNotSupportedErrorAlertView(string message)
-		{
+		void DisplaySimulatorNotSupportedErrorAlertView(string message) {
 			DisplayErrorAlertView("Simulator Not Supported", message);
 		}
 
-		void DisplayErrorAlertView(string title, string message)
-		{
+		void DisplayErrorAlertView(string title, string message) {
 			//Create Alert
 			var okAlertController = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
 
@@ -249,8 +235,7 @@ namespace Acquaint.Native.iOS
 		/// </summary>
 		/// <returns>The latitude in degrees.</returns>
 		/// <param name="miles">Miles.</param>
-		static double MilesToLatitudeDegrees(double miles)
-		{
+		static double MilesToLatitudeDegrees(double miles) {
 			const double earthRadius = 3960.0; // In miles. Wow!
 			const double radiansToDegrees = 180.0 / Math.PI;
 			return miles / earthRadius * radiansToDegrees;
@@ -262,8 +247,7 @@ namespace Acquaint.Native.iOS
 		/// <returns>The longitude in degrees.</returns>
 		/// <param name="miles">Miles.</param>
 		/// <param name="atLatitude">At latitude.</param>
-		static double MilesToLongitudeDegrees(double miles, double atLatitude)
-		{
+		static double MilesToLongitudeDegrees(double miles, double atLatitude) {
 			const double earthRadius = 3960.0; // In miles. Wow!
 			const double degreesToRadians = Math.PI / 180.0;
 			const double radiansToDegrees = 180.0 / Math.PI;
