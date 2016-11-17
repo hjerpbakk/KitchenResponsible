@@ -23,5 +23,12 @@ namespace KitchenResponsible.Controllers {
             // https://github.com/graphql-dotnet/graphql-dotnet
             return Ok(employeeService.Get());
         }
+
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return Ok(employeeService.Get(id));
+        }
     }
 }

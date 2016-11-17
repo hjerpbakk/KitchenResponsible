@@ -43,6 +43,10 @@ namespace KitchenResponsible.Services
             return employees;
         }
 
+        public Employee Get(int id) {
+            return employees[id];
+        }
+
         public ResponsibleForWeek GetEmployeeForWeek()
         {           
             var week = Week.GetIso8601WeekOfYear(DateTime.UtcNow);

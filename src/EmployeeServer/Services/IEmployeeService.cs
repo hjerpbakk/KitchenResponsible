@@ -7,5 +7,6 @@ namespace KitchenResponsible.Services
     {
         ResponsibleForWeek GetEmployeeForWeek();
         IEnumerable<Employee> Get();
+        Employee Get(int id);
     }
 }
