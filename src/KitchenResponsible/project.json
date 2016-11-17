@@ -22,7 +22,9 @@
         "Microsoft.Extensions.Logging.Debug": "1.0.0",
         "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
         "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-        "GraphQL": "0.13.0.562"
+        "GraphQL": "0.13.0.562",
+        "Swashbuckle.SwaggerGen": "6.0.0-beta901",
+        "Swashbuckle.SwaggerUi": "6.0.0-beta901"
     },
 
   "tools": {

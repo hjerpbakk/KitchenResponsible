@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.Swagger.Model;
 
 namespace KitchenResponsible
 {
@@ -38,6 +39,21 @@ namespace KitchenResponsible
             services.AddApplicationInsightsTelemetry(Configuration);
             
             services.AddMvc();
+
+            services.AddSwaggerGen();
+            //var pathToDoc = Configuration["Swagger:Path"];
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Info
+                {
+                    Version = "v1",
+                    Title = "DIPS Trondheim Employee API",
+                    Description = "Awesome API for working with Trondheim employees",
+                    TermsOfService = "For DIPSers"
+                });
+                //options.IncludeXmlComments(pathToDoc);
+                options.DescribeAllEnumsAsStrings();
+            });
 
             services.Configure<Paths>(options => Configuration.GetSection("Paths").Bind(options));
 
@@ -72,6 +88,9 @@ namespace KitchenResponsible
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseSwagger();
+            app.UseSwaggerUi();
         }
     }
 }
