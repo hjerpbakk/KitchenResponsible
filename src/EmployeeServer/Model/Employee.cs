@@ -8,14 +8,17 @@
             WeekResponsible = weekReponsible;
             FirstName = firstName;
             LastName = lastName;
-            Nick = nick ?? firstName; 
+            Nick = nick ?? firstName;
 
             JobTitle = "UX Utvikler";
             Company = "Health Angels";
             Email = "roh@dips.no";
             Phone = "98817218";
+
+            SmallPhotoUrl = "http://hjerpbakk.com/img/About/0Profilbilde.jpg";
         }
 
+        public int Id { get; }
         public ushort WeekResponsible { get; set; }
         public string Nick { get; }
         public string FirstName { get; }
@@ -24,6 +27,7 @@
         public string JobTitle { get; }
         public string Email { get; }
         public string Phone { get; }
-        public int Id { get; }
+        public string SmallPhotoUrl { get; }
+        
     }
 }

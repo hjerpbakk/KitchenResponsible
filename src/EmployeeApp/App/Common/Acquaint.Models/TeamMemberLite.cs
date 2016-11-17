@@ -4,12 +4,13 @@ using Newtonsoft.Json;
 namespace Acquaint.Models {
 	public class TeamMemberLite {
 		[JsonConstructor]
-		public TeamMemberLite(int id, string firstName, string lastName, string company, string jobTitle) {
+		public TeamMemberLite(int id, string firstName, string lastName, string company, string jobTitle, string smallPhotoUrl) {
 			Id = id;
 			FirstName = firstName;
 			LastName = lastName;
 			Company = company;
 			JobTitle = jobTitle;
+			SmallPhotoUrl = smallPhotoUrl;
 		}
 
 		public int Id { get; }
