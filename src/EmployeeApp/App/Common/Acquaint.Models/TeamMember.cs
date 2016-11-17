@@ -8,10 +8,10 @@ namespace Acquaint.Models {
 			Email = email;
 			Phone = phone;
 
-			State = "State";
-			City = "City";
-			Street = "Street";
-			PostalCode = "PostalCode";
+			State = "Norway";
+			City = "Trondheim";
+			Street = "Andersbakkan 64";
+			PostalCode = "7089";
 		}
 
 		public TeamMemberLite TeamMemberLite { private get; set; }
@@ -39,7 +39,7 @@ namespace Acquaint.Models {
 			!string.IsNullOrWhiteSpace(City) ? City + "," : "",
 			State,
 			PostalCode);
-
+		
 		[JsonIgnore]
 		public string StatePostal => State + " " + PostalCode;
 	}

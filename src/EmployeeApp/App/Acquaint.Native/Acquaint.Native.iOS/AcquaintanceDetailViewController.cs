@@ -70,6 +70,7 @@ namespace Acquaint.Native.iOS {
 				SetupDialNumberAction();
 				SetupSendEmailAction();
 
+				GetDirectionsImageView.Image = UIImage.FromBundle("directions");
 				// use FFImageLoading library to asynchronously:
 				await ImageService
 					.Instance
@@ -168,9 +169,7 @@ namespace Acquaint.Native.iOS {
 		}
 
 		void SetupGetDirectionsAction(double lat, double lon) {
-			GetDirectionsImageView.Image = UIImage.FromBundle("directions");
-
-			// UIImageView doesn't accept touch events by default, so we have to explcitly enable user interaction
+// UIImageView doesn't accept touch events by default, so we have to explcitly enable user interaction
 			GetDirectionsImageView.UserInteractionEnabled = true;
 
 			GetDirectionsImageView.AddGestureRecognizer(new UITapGestureRecognizer(async () => {
