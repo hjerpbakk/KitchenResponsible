@@ -213,6 +213,9 @@
     <Reference Include="Xamarin.iOS" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="Hjerpbakk.Common.iOS">
+      <HintPath>..\..\lib\Hjerpbakk.Common.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json">
