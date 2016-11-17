@@ -46,12 +46,18 @@ namespace Acquaint.Native.iOS {
 		// but before the view hierarchy is rendered to the device screen.
 		// The "async" keyword is added here to the override in order to allow other awaited async method calls inside the override to be called ascynchronously.
 		public override async void ViewWillAppear(bool animated) {
-			teamMember = await teamMemberService.Get(TeamMemberLite.Id);
+			if (TeamMemberLite == null) {
+				return;
+			}
+
+			Title = TeamMemberLite.DisplayName;
+			CompanyNameLabel.Text = TeamMemberLite.Company;
+			JobTitleLabel.Text = TeamMemberLite.JobTitle;
+
+			teamMember = await teamMemberService.Get(TeamMemberLite);
 			if (teamMember != null) {
 				// set the title and label text properties
-				Title = TeamMemberLite.DisplayName;
-				CompanyNameLabel.Text = TeamMemberLite.Company;
-				JobTitleLabel.Text = TeamMemberLite.JobTitle;
+
 				StreetLabel.Text = teamMember.Street;
 				CityLabel.Text = teamMember.City;
 				StateAndPostalLabel.Text = teamMember.StatePostal;
@@ -115,6 +121,12 @@ namespace Acquaint.Native.iOS {
 
 		public override void ViewDidLoad() {
 			base.ViewDidLoad();
+
+			StreetLabel.Text = "";
+			CityLabel.Text = "";
+			StateAndPostalLabel.Text = "";
+			PhoneLabel.Text = "";
+			EmailLabel.Text = "";
 
 			// override the back button text for AcquaintanceEditViewController (the navigated-to view controller)
 			NavigationItem.BackBarButtonItem = new UIBarButtonItem("Details", UIBarButtonItemStyle.Plain, null);

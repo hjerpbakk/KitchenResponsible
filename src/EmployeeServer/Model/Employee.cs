@@ -2,8 +2,9 @@
 {
     public class Employee
     {
-        public Employee(ushort weekReponsible, string firstName, string lastName, string nick = null)
+        public Employee(int id, ushort weekReponsible, string firstName, string lastName, string nick = null)
         {
+            Id = id;
             WeekResponsible = weekReponsible;
             FirstName = firstName;
             LastName = lastName;
@@ -13,9 +14,6 @@
             Company = "Health Angels";
             Email = "roh@dips.no";
             Phone = "98817218";
-
-            // TODO: Use id
-            Id = 1;
         }
 
         public ushort WeekResponsible { get; set; }

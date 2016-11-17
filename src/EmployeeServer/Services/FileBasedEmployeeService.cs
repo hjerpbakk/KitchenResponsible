@@ -40,6 +40,7 @@ namespace KitchenResponsible.Services
             }
         }
 
+        // TODO: Serverside cache
         public IEnumerable<Employee> Get() {
             Thread.Sleep(1000);
             return employees;
@@ -89,12 +90,11 @@ namespace KitchenResponsible.Services
         {
             var lines = File.ReadAllLines(employeesPath);
             var employeesFromDisk = new List<Employee>(lines.Length);
-            foreach (var line in lines)
-            {
-                var splittedLine = line.Split(SplitChar);
+            for (int i = 0; i < lines.Length; i++) {
+                var splittedLine = lines[i].Split(SplitChar);
                 var weekResponsible = ushort.Parse(splittedLine[0]);
                 var name = splittedLine[1].Trim();
-                employeesFromDisk.Add(new Employee(weekResponsible, name, "y0l0", name));
+                employeesFromDisk.Add(new Employee(i, weekResponsible, name, "y0l0", name));
             }
 
             return employeesFromDisk;

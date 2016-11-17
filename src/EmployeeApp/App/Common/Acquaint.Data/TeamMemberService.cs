@@ -24,13 +24,15 @@ namespace Acquaint.Data {
 			}
 		}
 
-		public async Task<TeamMember> Get(int id) {
+		// TODO: Client side cache
+		public async Task<TeamMember> Get(TeamMemberLite teamMemberLite) {
 			try {
-				var response = await httpClient.GetStringAsync($"http://localhost:5000/api/employees/{id}");
+				var response = await httpClient.GetStringAsync($"http://localhost:5000/api/employees/{teamMemberLite.Id}");
 				var teamMember = JsonConvert.DeserializeObject<TeamMember>(response);
+				teamMember.TeamMemberLite = teamMemberLite;
 				return teamMember;
 			} catch (Exception e) {
-				return new TeamMember(-1, "", "", "", "", "", "");
+				return new TeamMember("", "");
 			}
 		}
 	}

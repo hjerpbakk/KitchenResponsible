@@ -2,10 +2,9 @@
 using Newtonsoft.Json;
 
 namespace Acquaint.Models {
-	public class TeamMember : TeamMemberLite {
+	public class TeamMember {
 		[JsonConstructor]
-		public TeamMember(int id, string firstName, string lastName, string company, string jobTitle, string email, string phone) 
-			: base(id, firstName, lastName, company, jobTitle) {
+		public TeamMember(string email, string phone) {
 			Email = email;
 			Phone = phone;
 
@@ -14,6 +13,15 @@ namespace Acquaint.Models {
 			Street = "Street";
 			PostalCode = "PostalCode";
 		}
+
+		public TeamMemberLite TeamMemberLite { private get; set; }
+
+		public int Id { get { return TeamMemberLite.Id; } }
+		public string FirstName { get { return TeamMemberLite.FirstName; } }
+		public string LastName { get { return TeamMemberLite.LastName; } }
+		public string Company { get { return TeamMemberLite.Company; } }
+		public string JobTitle { get { return TeamMemberLite.JobTitle; } }
+		public string SmallPhotoUrl { get { return TeamMemberLite.SmallPhotoUrl; } }
 
 		public string Email { get; }
 		public string Phone { get; }
