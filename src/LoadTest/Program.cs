@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using LightBench;
 
 namespace LoadTest
 {
@@ -11,16 +12,19 @@ namespace LoadTest
     {
         public static void Main(string[] args)
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            
-            LoadTest().Wait();
-
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            PerformanceTest();
         }
 
-        static async Task LoadTest() {
+        static void PerformanceTest() {
+            var httpClient = new HttpClient();
+            Console.WriteLine(LightBench.Benchmark.Run(() => {
+                httpClient.GetStringAsync("http://localhost:5000/api/Employees/1").Wait();
+            }, 5, "Get by index", false).ToString());
+        }
+
+        static void LoadTest() {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             Console.WriteLine("Start");
             var httpClient = new HttpClient();
 
@@ -33,6 +37,8 @@ namespace LoadTest
             }
             
             Console.WriteLine("End");
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
     }
 }

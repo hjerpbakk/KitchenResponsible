@@ -8,7 +8,8 @@
     "Microsoft.NETCore.App": {
       "type": "platform",
       "version": "1.0.1"
-    }
+    },
+    "LightBench": "1.1.1" 
   },
 
   "frameworks": {
