@@ -58,6 +58,7 @@ namespace KitchenResponsible
             services.Configure<Paths>(options => Configuration.GetSection("Paths").Bind(options));
 
             services.AddSingleton<IEmployeeService, FileBasedEmployeeService>();
+            services.AddSingleton<IServiceCache, ServiceCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
