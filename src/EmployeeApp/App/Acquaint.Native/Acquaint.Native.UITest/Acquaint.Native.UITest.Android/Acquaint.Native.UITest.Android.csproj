@@ -43,14 +43,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\Acquaint.Native.Droid\Acquaint.Native.Droid.csproj">
-      <Project>{CFBC7191-CBAB-4544-AA32-E5DABDE81B14}</Project>
-      <Name>Acquaint.Native.Droid</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
