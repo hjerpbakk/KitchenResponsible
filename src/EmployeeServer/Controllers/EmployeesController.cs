@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using KitchenResponsible.Model;
 using KitchenResponsible.Services;
 using System.Collections;
+using KitchenResponsible.Data;
 
 namespace KitchenResponsible.Controllers {
     [Route("api/[controller]")]
@@ -31,6 +32,7 @@ namespace KitchenResponsible.Controllers {
                 return response; 
             }
             
+            var nicks = (new TeamMembersRepo()).Test();
             return cachedResponse;
         }
 

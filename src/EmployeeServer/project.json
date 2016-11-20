@@ -24,7 +24,8 @@
         "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
         "GraphQL": "0.13.0.562",
         "Swashbuckle.SwaggerGen": "6.0.0-beta901",
-        "Swashbuckle.SwaggerUi": "6.0.0-beta901"
+        "Swashbuckle.SwaggerUi": "6.0.0-beta901",
+        "Microsoft.Data.Sqlite": "1.1.0"
     },
 
   "tools": {
