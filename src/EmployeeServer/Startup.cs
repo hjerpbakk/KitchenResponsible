@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KitchenResponsible.Data;
 using KitchenResponsible.Services;
+using KitchenResponsible.Utils.DateAndTime;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -57,8 +59,13 @@ namespace KitchenResponsible
 
             services.Configure<Paths>(options => Configuration.GetSection("Paths").Bind(options));
 
-            services.AddSingleton<IKitchenResponsibleService, FileBasedEmployeeService>();
-            services.AddSingleton<IEmployeeService, EmployeeService>();
+            services.AddTransient<IWeekNumberFinder, WeekNumberFinder>();
+
+            services.AddTransient<ITrondheimRepository, TrondheimRepository>();
+
+            services.AddTransient<IKitchenResponsibleService, KitchenResponsibleService>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
+                        
             services.AddSingleton<IServiceCache, ServiceCache>();
         }
 

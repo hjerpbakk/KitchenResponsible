@@ -4,25 +4,28 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Options;
 using KitchenResponsible.Model;
+using KitchenResponsible.Utils.DateAndTime;
 
 namespace KitchenResponsible.Services
 {
-    public class FileBasedEmployeeService : IKitchenResponsibleService
+    public class FileBasedKitchenResponsibleService : IKitchenResponsibleService
     {
         const char SplitChar = ';';
         static string employeesPath;
         static string currentWeekPath;
 
         static readonly Random random;
+        readonly IWeekNumberFinder weekNumberFinder;
 
         private static ResponsibleForWeek? currentWeek;
         private static List<Employee> employees;             
 
-        static FileBasedEmployeeService() {
+        static FileBasedKitchenResponsibleService() {
             random = new Random();
         }       
 
-        public FileBasedEmployeeService(IOptions<Paths> paths) {
+        public FileBasedKitchenResponsibleService(IOptions<Paths> paths, IWeekNumberFinder weekNumberFinder) {
+            this.weekNumberFinder = weekNumberFinder;
             if (employeesPath == null) {
                 employeesPath = Path.Combine(paths.Value.FilePath + "Employees.txt");
                 employees = GetEmployees();
@@ -39,7 +42,7 @@ namespace KitchenResponsible.Services
        
         public ResponsibleForWeek GetEmployeeForWeek()
         {           
-            var week = Week.GetIso8601WeekOfYear(DateTime.UtcNow);
+            var week = weekNumberFinder.GetIso8601WeekOfYear(DateTime.UtcNow);
             if (currentWeek.Value.Week == week) {
                 return currentWeek.Value;
             }
