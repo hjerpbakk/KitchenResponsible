@@ -32,7 +32,6 @@ namespace KitchenResponsible.Controllers {
                 return response; 
             }
             
-            var nicks = (new TeamMembersRepo()).Test();
             return cachedResponse;
         }
 

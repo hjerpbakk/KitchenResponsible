@@ -9,9 +9,9 @@ namespace KitchenResponsible.Controllers
 {
     public class HomeController : Controller
     {
-        readonly IEmployeeService employeeService;
+        readonly IKitchenResponsibleService employeeService;
 
-        public HomeController (IEmployeeService employeeService)
+        public HomeController (IKitchenResponsibleService employeeService)
         {
             this.employeeService = employeeService;
         }

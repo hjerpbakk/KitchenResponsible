@@ -57,7 +57,8 @@ namespace KitchenResponsible
 
             services.Configure<Paths>(options => Configuration.GetSection("Paths").Bind(options));
 
-            services.AddSingleton<IEmployeeService, FileBasedEmployeeService>();
+            services.AddSingleton<IKitchenResponsibleService, FileBasedEmployeeService>();
+            services.AddSingleton<IEmployeeService, EmployeeService>();
             services.AddSingleton<IServiceCache, ServiceCache>();
         }
 

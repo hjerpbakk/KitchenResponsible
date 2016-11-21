@@ -1,8 +1,7 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-public class ServiceCache : IServiceCache{     
+public class ServiceCache : IServiceCache {     
     readonly ConcurrentDictionary<int, IActionResult> cache;
     
     public ServiceCache() {

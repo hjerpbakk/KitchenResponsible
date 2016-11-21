@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Options;
 using KitchenResponsible.Model;
-using System.Threading;
 
 namespace KitchenResponsible.Services
 {
-    public class FileBasedEmployeeService : IEmployeeService
+    public class FileBasedEmployeeService : IKitchenResponsibleService
     {
         const char SplitChar = ';';
         static string employeesPath;
@@ -17,9 +16,7 @@ namespace KitchenResponsible.Services
         static readonly Random random;
 
         private static ResponsibleForWeek? currentWeek;
-        private static List<Employee> employees;      
-
-        // TODO: Bort fra static, utnytt at det er en singleton
+        private static List<Employee> employees;             
 
         static FileBasedEmployeeService() {
             random = new Random();
@@ -39,18 +36,7 @@ namespace KitchenResponsible.Services
                 currentWeek = GetCurrentWeek();
             }
         }
-
-        // TODO: Serverside cache
-        public IEnumerable<Employee> Get() {
-            Thread.Sleep(1000);
-            return employees;
-        }
-
-        public Employee Get(int id) {
-            Thread.Sleep(2000);
-            return employees[id];
-        }
-
+       
         public ResponsibleForWeek GetEmployeeForWeek()
         {           
             var week = Week.GetIso8601WeekOfYear(DateTime.UtcNow);
