@@ -3,7 +3,7 @@ using Microsoft.Data.Sqlite;
 
 namespace KitchenResponsible.Data {
     public class TeamMembersRepo {
-        public IList<string> Test() {
+        public IList<string> GetNicks() {
             using (var connection = new SqliteConnection("Filename=" + "Trondheim.db")) {
                 connection.Open();
                 var command = connection.CreateCommand();
