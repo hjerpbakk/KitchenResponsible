@@ -1,0 +1,22 @@
+16;Runar
+47;Fredrik
+48;Phuong
+49;Andreas
+50;Simon
+51;Ivar LG
+52;Henrik
+1;Øyvin
+2;Bernhard
+3;Marius NL
+4;Stig Rune
+5;Malin
+6;Eirik
+7;Terje
+8;Sindre
+9;Tonje
+10;Robin
+11;Ivar Y
+12;Håvard
+13;Marius M
+14;Erik
+15;Stine
