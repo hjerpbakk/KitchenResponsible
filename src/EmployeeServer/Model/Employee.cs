@@ -29,5 +29,6 @@
         public string Phone { get; }
         public string SmallPhotoUrl { get; }
         
+        public override string ToString() => $"{Nick} {WeekResponsible}";
     }
 }

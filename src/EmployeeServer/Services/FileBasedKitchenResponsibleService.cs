@@ -125,7 +125,7 @@ namespace KitchenResponsible.Services
 
         private static void SetCurrentWeek(string responsible, string onDeck)
         {
-            var newWeekNumber = (ushort)(currentWeek.Value.Week + 1);
+            var newWeekNumber = GetNextWeek(currentWeek.Value.Week);
             currentWeek = new ResponsibleForWeek(newWeekNumber, responsible, onDeck);
             var lines = new string[3];
             lines[0] = currentWeek.Value.Week.ToString();
