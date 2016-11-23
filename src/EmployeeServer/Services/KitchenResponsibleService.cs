@@ -17,11 +17,10 @@ namespace KitchenResponsible.Services {
             this.weekNumberFinder = weekNumberFinder;   
         }
 
-        // TODO: Tests for old implementation
         // TODO: Update when new week and satisfy old tests...
         public ResponsibleForWeek GetEmployeeForWeek() {
             var week = weekNumberFinder.GetIso8601WeekOfYear(DateTime.UtcNow);
-            var nextWeek = weekNumberFinder.GetNextWeek(week);
+            var nextWeek = WeekNumberFinder.GetNextWeek(week);
             return trondheimRepository.GetResponsibleForThisWeekAndNext(week, nextWeek);
         }
     }

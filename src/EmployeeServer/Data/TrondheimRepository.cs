@@ -30,7 +30,7 @@ namespace KitchenResponsible.Data {
         public ResponsibleForWeek GetResponsibleForThisWeekAndNext(ushort week, ushort nextWeek) {
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT Responsible FROM KitchenResponsible WHERE Week = $week or Week = $nextWeek";
+                command.CommandText = "SELECT Responsible FROM KitchenResponsible WHERE Week = $week or Week = $nextWeek ORDER BY Week";
                 command.Parameters.AddWithValue("$week", week);
                 command.Parameters.AddWithValue("$nextWeek", nextWeek);
                 var responsibles = new string[2];
@@ -41,7 +41,7 @@ namespace KitchenResponsible.Data {
                     }
                 }
 
-                return new ResponsibleForWeek(week, responsibles[0], responsibles[1]);
+                return nextWeek == 1 ? new ResponsibleForWeek(week, responsibles[1], responsibles[0]) : new ResponsibleForWeek(week, responsibles[0], responsibles[1]);
             }
         }
 

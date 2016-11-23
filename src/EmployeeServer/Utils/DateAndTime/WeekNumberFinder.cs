@@ -21,7 +21,7 @@ namespace KitchenResponsible.Utils.DateAndTime {
             return (ushort)CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
-        public ushort GetNextWeek(ushort week) => week == 52 ? (ushort)1 : (ushort)(week + 1);
+        public static ushort GetNextWeek(ushort week) => week == 52 ? (ushort)1 : (ushort)(week + 1);
     }
 }
 

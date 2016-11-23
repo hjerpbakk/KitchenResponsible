@@ -7,6 +7,7 @@ using KitchenResponsible.Utils.DateAndTime;
 using System.IO;
 using KitchenResponsible.Model;
 using KitchenResponsible.Data;
+using System.Reflection;
 
 namespace Tests {
     public class KitchenResponsibleServiceTests : IClassFixture<DbFixture> {
@@ -66,22 +67,33 @@ namespace Tests {
             var weekNumberFinderFake = new Mock<IWeekNumberFinder>();
             weekNumberFinderFake.Setup(w => w.GetIso8601WeekOfYear(It.IsAny<DateTime>())).Returns(week);
             var service = new KitchenResponsibleService(trondheimRepository, weekNumberFinderFake.Object);
-
+            
             return service.GetEmployeeForWeek();
         }
     }
 
     public class DbFixture : IDisposable {
-        
-        
+        // TODO: Use in-memory Db instead
+        readonly string[] files;
+                
         public DbFixture() {
-            
-        }
+            files = new [] { "bin/Debug/netcoreapp1.1/Trondheim.db" };
+            foreach (var file in files) {
+                File.Copy(file, AddBakPostfix(file), true);
+            }
 
-        public void Dispose() {
-            
+            TrondheimRepository = new TrondheimRepository();
         }
 
         public ITrondheimRepository TrondheimRepository { get; }
+        public void Dispose() {
+            foreach (var file in files) {
+                File.Copy(AddBakPostfix(file), file, true);
+            }
+        }      
+
+        private string AddBakPostfix(string fileName) {
+            return fileName + "bak";
+        } 
     }
 }

@@ -7,7 +7,5 @@ namespace KitchenResponsible.Utils.DateAndTime {
         /// Week 1 is the 1st week of the year with a Thursday in it.
         /// </summary>
         ushort GetIso8601WeekOfYear(DateTime time);
-
-        ushort GetNextWeek(ushort week);
     }
 }
