@@ -22,6 +22,8 @@ namespace KitchenResponsible.Utils.DateAndTime {
         }
 
         public static ushort GetNextWeek(ushort week) => week == 52 ? (ushort)1 : (ushort)(week + 1);
+
+        public static ushort GetPreviousWeek(ushort week) => week == 1 ? (ushort)52 : (ushort)(week - 1);
     }
 }
 

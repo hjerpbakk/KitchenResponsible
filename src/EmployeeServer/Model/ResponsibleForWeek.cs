@@ -12,5 +12,7 @@
         public ushort Week { get; }
         public string Responsible { get; }
         public string OnDeck { get; }
+
+        public override string ToString() => $"{Week} {Responsible} {OnDeck}";
     }
 }
