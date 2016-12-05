@@ -29,34 +29,14 @@ namespace KitchenResponsible.Data {
                 return nicks;
             }
         }
-        public ResponsibleForWeek GetResponsibleForThisWeekAndNext(ushort week, ushort nextWeek) {
-            using (var connection = OpenConnection()) {
-                var command = connection.CreateCommand();
-                command.CommandText = "SELECT Responsible FROM KitchenResponsible WHERE Week = $week or Week = $nextWeek ORDER BY Week";
-                command.Parameters.AddWithValue("$week", week);
-                command.Parameters.AddWithValue("$nextWeek", nextWeek);
-                var responsibles = new string[2];
-                using (var reader = command.ExecuteReader()) {
-                    var i = 0;
-                    while (reader.Read()) {
-                        responsibles[i++] = reader.GetString(0);
-                    }
-                }
-
-                return nextWeek == 1 ? new ResponsibleForWeek(week, responsibles[1], responsibles[0]) : new ResponsibleForWeek(week, responsibles[0], responsibles[1]);
-            }
-        }
-
         public IReadOnlyList<Week> GetWeeksWithResponsible() {
-            //Thread.Sleep(1000);
-            // SELECT Week, Responsible FROM KitchenResponsible ORDER BY Week
-             using (var connection = OpenConnection()) {
+            using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT Week, Responsible FROM KitchenResponsible ORDER BY Week";
                 var weeksWithResponsible = new List<Week>();
                 using (var reader = command.ExecuteReader()) {
                     while (reader.Read()) {
-                        weeksWithResponsible.Add(new Week(ushort.Parse(reader.GetString(0)), reader.GetString(1), 0));
+                        weeksWithResponsible.Add(new Week(ushort.Parse(reader.GetString(0)), reader.GetString(1)));
                     }
                 }
 
@@ -65,7 +45,14 @@ namespace KitchenResponsible.Data {
         }
 
         public void DeleteWeeks(ushort[] weeks) {
-            // TODO: Skip om tom
+            if (weeks == null) {
+                throw new ArgumentNullException(nameof(weeks));
+            }
+
+            if (weeks.Length == 0) {
+                return;
+            }
+
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
                 var weeksSQL = String.Join(",", weeks.Select(w => w.ToString()));
@@ -75,7 +62,14 @@ namespace KitchenResponsible.Data {
         }
 
         public void InsertWeeks(Week[] weeks) {
-            // TODO: Skip om tom
+            if (weeks == null) {
+                throw new ArgumentNullException(nameof(weeks));
+            }
+
+            if (weeks.Length == 0) {
+                return;
+            }
+
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
                 var weeksSQL = String.Join(",", weeks.Select(w => $"({w.WeekNumber}, \"{w.Responsible}\")"));
@@ -85,7 +79,10 @@ namespace KitchenResponsible.Data {
         }
 
         public void AddNewEmployee(Employee employee) {
-            // TODO: Skip om tom
+            if (employee == null) {
+                throw new ArgumentNullException(nameof(employee));
+            }
+
             // TODO: Må få kjøkkenskift
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
