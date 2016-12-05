@@ -16,7 +16,7 @@ namespace KitchenResponsible.Services {
         }
 
         public ResponsibleForWeek GetEmployeeForWeek() {
-            var week = weekNumberFinder.GetIso8601WeekOfYear(DateTime.UtcNow);
+            var week = weekNumberFinder.GetIso8601WeekOfYear();
             var weeksWithResponsible = repository.GetWeeksWithResponsible();
             
             var weeksToDelete = RemovePastWeeks(week, weeksWithResponsible);

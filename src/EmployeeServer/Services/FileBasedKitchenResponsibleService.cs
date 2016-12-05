@@ -42,7 +42,7 @@ namespace KitchenResponsible.Services
        
         public ResponsibleForWeek GetEmployeeForWeek()
         {           
-            var week = weekNumberFinder.GetIso8601WeekOfYear(DateTime.UtcNow);
+            var week = weekNumberFinder.GetIso8601WeekOfYear();
             if (currentWeek.Value.Week == week) {
                 return currentWeek.Value;
             }

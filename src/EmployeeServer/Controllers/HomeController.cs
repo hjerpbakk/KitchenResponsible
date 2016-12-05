@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KitchenResponsible.Filters;
 using KitchenResponsible.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitchenResponsible.Controllers
 {
+    [TypeFilter(typeof(LessPoorButStillPoorCacheResourceFilterAttribute))]
     public class HomeController : Controller
     {
         readonly IKitchenResponsibleService employeeService;
@@ -18,6 +20,7 @@ namespace KitchenResponsible.Controllers
 
         public IActionResult Index()
         {
+            // TODO: What about different timezones? Now the server is king, but actually Trondheim office is king
             var employeeForWeek = employeeService.GetEmployeeForWeek();
             ViewData["Week"] = employeeForWeek.Week;
             ViewData["Responsible"] = employeeForWeek.Responsible;

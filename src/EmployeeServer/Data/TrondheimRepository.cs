@@ -15,7 +15,8 @@ namespace KitchenResponsible.Data {
         }
 
         public IList<string> GetNicks() {
-            using (var connection = new SqliteConnection("Filename=" + "Trondheim.db")) {
+            Thread.Sleep(500);
+            using (var connection = OpenConnection()) {
                 connection.Open();
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT Nick FROM TeamMembers";
@@ -30,6 +31,7 @@ namespace KitchenResponsible.Data {
             }
         }
         public IReadOnlyList<Week> GetWeeksWithResponsible() {
+            Thread.Sleep(500);
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT Week, Responsible FROM KitchenResponsible ORDER BY Week";
@@ -45,6 +47,7 @@ namespace KitchenResponsible.Data {
         }
 
         public void RemovePastWeeksAndAddNewOnces(ushort[] passedWeeks, Week[] newWeeks) {
+            Thread.Sleep(500);
             if (passedWeeks == null) {
                 throw new ArgumentNullException(nameof(passedWeeks));
             }
@@ -76,6 +79,7 @@ namespace KitchenResponsible.Data {
         }
 
         public void AddNewEmployee(Employee employee) {
+            Thread.Sleep(500);
             if (employee == null) {
                 throw new ArgumentNullException(nameof(employee));
             }
