@@ -17,15 +17,21 @@ namespace KitchenResponsible.Services {
             this.weekNumberFinder = weekNumberFinder;   
         }
 
-        // Insert
-        // Sett inn i neste ledige uke, få like mange weeks som den som har mest
-
         public ResponsibleForWeek GetEmployeeForWeek() {
             // TODO: Transaksjon over hele her
             var week = weekNumberFinder.GetIso8601WeekOfYear(DateTime.UtcNow);
             var weeksWithResponsible = repository.GetWeeksWithResponsible();
             
-            // Alle uker før denne må slettes
+            var weeksToDelete = FindPastWeeks(week, weeksWithResponsible);
+            if (weeksToDelete.Count > 0) {
+                RemovePastWeeksAndAddNewOnces(weeksToDelete, weeksWithResponsible);
+            }
+
+            // TODO: Benytt heller dataene som allerede er hentet               
+            return repository.GetResponsibleForThisWeekAndNext(week, WeekNumberFinder.GetNextWeek(week));
+        }
+
+        private IReadOnlyList<Week> FindPastWeeks(ushort week, IReadOnlyList<Week> weeksWithResponsible) {
             var weeksToDelete = new List<Week>();
             var previousWeek = WeekNumberFinder.GetPreviousWeek(week);
             Week weekWithResponsible;
@@ -33,36 +39,36 @@ namespace KitchenResponsible.Services {
                 weeksToDelete.Add(weekWithResponsible);
                 previousWeek = WeekNumberFinder.GetPreviousWeek(previousWeek);
             }
-                        
-            repository.DeleteWeeks(weeksToDelete.Select(w => w.WeekNumber));
-            
-            // De som ble fjernet må fordeles på framtidige uker
-            var newResponsiblesForWeeks = new Week[weeksToDelete.Count];
-            ushort lastWeek = 0;
-            int prev = 0;
-            if (weeksWithResponsible.Last().WeekNumber == 52) {
-                for (int i = 0; i < 52; ++i) {
-                    if (weeksWithResponsible[i].WeekNumber - prev > 1) {
-                        lastWeek = weeksWithResponsible[i - 1].WeekNumber;
-                        break;
-                    } else {
-                        prev++;
+
+            return weeksToDelete;
+        }
+
+        private void RemovePastWeeksAndAddNewOnces(IReadOnlyList<Week> weeksToDelete, IReadOnlyList<Week> weeksWithResponsible) {
+            repository.DeleteWeeks(weeksToDelete.Select(w => w.WeekNumber).ToArray());
+                
+                // De som ble fjernet må fordeles på framtidige uker
+                var newResponsiblesForWeeks = new Week[weeksToDelete.Count];
+                ushort lastWeek = 0;
+                int prev = 0;
+                if (weeksWithResponsible.Last().WeekNumber == 52) {
+                    for (int i = 0; i < 52; ++i) {
+                        if (weeksWithResponsible[i].WeekNumber - prev > 1) {
+                            lastWeek = weeksWithResponsible[i - 1].WeekNumber;
+                            break;
+                        } else {
+                            prev++;
+                        }
                     }
+                } else {
+                    lastWeek = weeksWithResponsible.Last().WeekNumber;
                 }
-            } else {
-                lastWeek = weeksWithResponsible.Last().WeekNumber;
-            }
 
-            // TODO: Sjekk om vi har nye ansatte som ennå ikke er blitt fordelt, fordel disse før de som allerede har gjort sitt
-            for (int i = 0; i < weeksToDelete.Count; i++) {
-                lastWeek = WeekNumberFinder.GetNextWeek(lastWeek);
-                newResponsiblesForWeeks[i] = new Week(lastWeek, weeksToDelete[i].Responsible, 0);
-            }
-            
-            repository.InsertWeeks(newResponsiblesForWeeks);
-
-            // TODO: Benytt heller dataene som allerede er hentet               
-            return repository.GetResponsibleForThisWeekAndNext(week, WeekNumberFinder.GetNextWeek(week));
+                for (int i = 0; i < weeksToDelete.Count; i++) {
+                    lastWeek = WeekNumberFinder.GetNextWeek(lastWeek);
+                    newResponsiblesForWeeks[i] = new Week(lastWeek, weeksToDelete[i].Responsible, 0);
+                }
+                
+                repository.InsertWeeks(newResponsiblesForWeeks);
         }
     }
 }

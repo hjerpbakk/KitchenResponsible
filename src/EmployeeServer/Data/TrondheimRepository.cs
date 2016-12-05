@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using KitchenResponsible.Model;
 using Microsoft.Data.Sqlite;
@@ -62,15 +64,29 @@ namespace KitchenResponsible.Data {
              }
         }
 
-        public void DeleteWeeks(IEnumerable<ushort> weeks) {
-
+        public void DeleteWeeks(ushort[] weeks) {
+            // TODO: Skip om tom
+            using (var connection = OpenConnection()) {
+                var command = connection.CreateCommand();
+                var weeksSQL = String.Join(",", weeks.Select(w => w.ToString()));
+                command.CommandText = $"DELETE FROM KitchenResponsible WHERE Week IN ({weeksSQL})";
+                command.ExecuteScalar();
+            }
         }
 
         public void InsertWeeks(Week[] weeks) {
-            
+            // TODO: Skip om tom
+            using (var connection = OpenConnection()) {
+                var command = connection.CreateCommand();
+                var weeksSQL = String.Join(",", weeks.Select(w => $"({w.WeekNumber}, \"{w.Responsible}\")"));
+                command.CommandText = $"INSERT INTO KitchenResponsible (Week, Responsible) VALUES {weeksSQL}";
+                command.ExecuteScalar();
+            }
         }
 
         public void AddNewEmployee(Employee employee) {
+            // TODO: Skip om tom
+            // TODO: Må få kjøkkenskift
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
                 command.CommandText = "INSERT INTO TeamMembers (Nick) VALUES (\"$nick\")";
@@ -78,6 +94,9 @@ namespace KitchenResponsible.Data {
                 command.ExecuteNonQuery();
             }
         }
+
+        // TODO: Remove employee
+        // TODO: Må fjerne skiftet på kjøkkenet og lagt inn en av de andre
 
         private SqliteConnection OpenConnection() {
             var connection = new SqliteConnection(connectionString);
