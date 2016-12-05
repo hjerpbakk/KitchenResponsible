@@ -38,19 +38,27 @@ namespace KitchenResponsible.Services {
             
             // De som ble fjernet må fordeles på framtidige uker
             var newResponsiblesForWeeks = new Week[weeksToDelete.Count];
-            ushort lastWeek = 1;
+            ushort lastWeek = 0;
+            int prev = 0;
             if (weeksWithResponsible.Last().WeekNumber == 52) {
-                while (weeksWithResponsible.SingleOrDefault(w => w.WeekNumber == lastWeek++).Responsible != null) {
+                for (int i = 0; i < 52; ++i) {
+                    if (weeksWithResponsible[i].WeekNumber - prev > 1) {
+                        lastWeek = weeksWithResponsible[i - 1].WeekNumber;
+                        break;
+                    } else {
+                        prev++;
+                    }
                 }
             } else {
                 lastWeek = weeksWithResponsible.Last().WeekNumber;
             }
 
+            // TODO: Sjekk om vi har nye ansatte som ennå ikke er blitt fordelt, fordel disse før de som allerede har gjort sitt
             for (int i = 0; i < weeksToDelete.Count; i++) {
                 lastWeek = WeekNumberFinder.GetNextWeek(lastWeek);
                 newResponsiblesForWeeks[i] = new Week(lastWeek, weeksToDelete[i].Responsible, 0);
             }
-
+            
             repository.InsertWeeks(newResponsiblesForWeeks);
 
             // TODO: Benytt heller dataene som allerede er hentet               
