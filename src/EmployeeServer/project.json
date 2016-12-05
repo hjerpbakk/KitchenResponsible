@@ -44,7 +44,9 @@
 
   "buildOptions": {
     "emitEntryPoint": true,
-    "preserveCompilationContext": true
+    "preserveCompilationContext": true,
+    "warningsAsErrors": true,
+    "optimize": true
   },
 
   "runtimeOptions": {

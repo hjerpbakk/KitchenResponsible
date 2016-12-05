@@ -20,6 +20,7 @@ namespace KitchenResponsible.Controllers
 
         public IActionResult Index()
         {
+            // TODO: How does release builds work now? dotnet publish --configuration release
             // TODO: What about different timezones? Now the server is king, but actually Trondheim office is king
             var employeeForWeek = employeeService.GetEmployeeForWeek();
             ViewData["Week"] = employeeForWeek.Week;
