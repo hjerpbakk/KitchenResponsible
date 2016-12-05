@@ -16,13 +16,12 @@ namespace KitchenResponsible.Services {
         }
 
         public ResponsibleForWeek GetEmployeeForWeek() {
-            // TODO: Transaksjon over hele her
             var week = weekNumberFinder.GetIso8601WeekOfYear(DateTime.UtcNow);
             var weeksWithResponsible = repository.GetWeeksWithResponsible();
             
-            var weeksToDelete = FindPastWeeks(week, weeksWithResponsible);
+            var weeksToDelete = RemovePastWeeks(week, weeksWithResponsible);
             if (weeksToDelete.Count > 0) {
-                RemovePastWeeksAndAddNewOnces(weeksToDelete, weeksWithResponsible);
+                AddNewWeeks(weeksToDelete, weeksWithResponsible);
             }
 
             var responsible = weeksWithResponsible.Single(w => w.WeekNumber == week).Responsible;
@@ -30,7 +29,7 @@ namespace KitchenResponsible.Services {
             return new ResponsibleForWeek(week, responsible, upNext);
         }
 
-        private IReadOnlyList<Week> FindPastWeeks(ushort week, IReadOnlyList<Week> weeksWithResponsible) {
+        private IReadOnlyList<Week> RemovePastWeeks(ushort week, IReadOnlyList<Week> weeksWithResponsible) {
             var weeksToDelete = new List<Week>();
             var previousWeek = WeekNumberFinder.GetPreviousWeek(week);
             Week weekWithResponsible;
@@ -42,9 +41,7 @@ namespace KitchenResponsible.Services {
             return weeksToDelete;
         }
 
-        private void RemovePastWeeksAndAddNewOnces(IReadOnlyList<Week> weeksToDelete, IReadOnlyList<Week> weeksWithResponsible) {
-            repository.DeleteWeeks(weeksToDelete.Select(w => w.WeekNumber).ToArray());
-                
+        private void AddNewWeeks(IReadOnlyList<Week> weeksToDelete, IReadOnlyList<Week> weeksWithResponsible) {              
             var newResponsiblesForWeeks = new Week[weeksToDelete.Count];
             ushort lastWeek = 0;
             int prev = 0;
@@ -66,7 +63,7 @@ namespace KitchenResponsible.Services {
                 newResponsiblesForWeeks[i] = new Week(lastWeek, weeksToDelete[i].Responsible);
             }
             
-            repository.InsertWeeks(newResponsiblesForWeeks);
+            repository.RemovePastWeeksAndAddNewOnces(weeksToDelete.Select(w => w.WeekNumber).ToArray(), newResponsiblesForWeeks);
         }
     }
 }

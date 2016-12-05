@@ -44,38 +44,35 @@ namespace KitchenResponsible.Data {
              }
         }
 
-        public void DeleteWeeks(ushort[] weeks) {
-            if (weeks == null) {
-                throw new ArgumentNullException(nameof(weeks));
+        public void RemovePastWeeksAndAddNewOnces(ushort[] passedWeeks, Week[] newWeeks) {
+            if (passedWeeks == null) {
+                throw new ArgumentNullException(nameof(passedWeeks));
             }
 
-            if (weeks.Length == 0) {
-                return;
-            }
-
-            using (var connection = OpenConnection()) {
-                var command = connection.CreateCommand();
-                var weeksSQL = String.Join(",", weeks.Select(w => w.ToString()));
-                command.CommandText = $"DELETE FROM KitchenResponsible WHERE Week IN ({weeksSQL})";
-                command.ExecuteScalar();
-            }
-        }
-
-        public void InsertWeeks(Week[] weeks) {
-            if (weeks == null) {
-                throw new ArgumentNullException(nameof(weeks));
-            }
-
-            if (weeks.Length == 0) {
-                return;
-            }
+            if (newWeeks == null) {
+                throw new ArgumentNullException(nameof(newWeeks));
+            }          
 
             using (var connection = OpenConnection()) {
-                var command = connection.CreateCommand();
-                var weeksSQL = String.Join(",", weeks.Select(w => $"({w.WeekNumber}, \"{w.Responsible}\")"));
-                command.CommandText = $"INSERT INTO KitchenResponsible (Week, Responsible) VALUES {weeksSQL}";
-                command.ExecuteScalar();
-            }
+                var transaction = connection.BeginTransaction();
+                if (passedWeeks.Length == 0) {
+                    return;
+                }
+                var removeCommand = connection.CreateCommand();
+                var remove = String.Join(",", passedWeeks.Select(w => w.ToString()));
+                removeCommand.CommandText = $"DELETE FROM KitchenResponsible WHERE Week IN ({remove})";
+                removeCommand.ExecuteScalar();
+
+                if (newWeeks.Length == 0) {
+                    return;
+                }
+
+                var insertCommand = connection.CreateCommand();
+                var insert = String.Join(",", newWeeks.Select(w => $"({w.WeekNumber}, \"{w.Responsible}\")"));
+                insertCommand.CommandText = $"INSERT INTO KitchenResponsible (Week, Responsible) VALUES {insert}";
+                insertCommand.ExecuteScalar();
+                transaction.Commit();
+            }          
         }
 
         public void AddNewEmployee(Employee employee) {

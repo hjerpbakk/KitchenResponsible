@@ -4,7 +4,6 @@ using KitchenResponsible.Model;
 namespace KitchenResponsible.Data {
     public interface ITrondheimRepository {
         IReadOnlyList<Week> GetWeeksWithResponsible();
-        void DeleteWeeks(ushort[] weeks);
-        void InsertWeeks(Week[] weeks);
+        void RemovePastWeeksAndAddNewOnces(ushort[] passedWeeks, Week[] newWeeks);
     }
 }
