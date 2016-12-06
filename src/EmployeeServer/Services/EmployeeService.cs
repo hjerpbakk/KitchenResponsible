@@ -1,35 +1,26 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using KitchenResponsible.Data;
 using KitchenResponsible.Model;
 
 namespace KitchenResponsible.Services {
     public class EmployeeService : IEmployeeService {
-        const char SplitChar = ';';
+        readonly ITrondheimRepository repository;
 
-        // TODO: Crap for now
-        public IEnumerable<Employee> Get() {
+        public EmployeeService(ITrondheimRepository trondheimRepository) {
+            this.repository = trondheimRepository;  
+        }
+
+        public Employee[] Get() {
             Thread.Sleep(500);
-            return GetEmployees();
+            return repository.GetNicks().Select(e => new Employee(0, 1, "a", "b", e)).ToArray();
         }
 
         public Employee Get(int id) {
             Thread.Sleep(500);
-            return GetEmployees()[id];
-        }
-
-        private static List<Employee> GetEmployees() {
-            var employeesPath = Path.Combine("" + "Employees.txt");
-            var lines = File.ReadAllLines(employeesPath);
-            var employeesFromDisk = new List<Employee>(lines.Length);
-            for (int i = 0; i < lines.Length; i++) {
-                var splittedLine = lines[i].Split(SplitChar);
-                var weekResponsible = ushort.Parse(splittedLine[0]);
-                var name = splittedLine[1].Trim();
-                employeesFromDisk.Add(new Employee(i, weekResponsible, name, "y0l0", name));
-            }
-
-            return employeesFromDisk;
+            return new Employee(0, 1, "a", "b");
         }
     }
 }

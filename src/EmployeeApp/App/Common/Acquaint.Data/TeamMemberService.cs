@@ -14,13 +14,13 @@ namespace Acquaint.Data {
 			httpClient = new HttpClient();
 		}
 
-		public async Task<IEnumerable<TeamMemberLite>> Get() {
+		public async Task<TeamMemberLite[]> Get() {
 			try {
 				var response = await httpClient.GetStringAsync("http://localhost:5000/api/employees");
-				var teamMembers = JsonConvert.DeserializeObject<IEnumerable<TeamMemberLite>>(response);
+				var teamMembers = JsonConvert.DeserializeObject<TeamMemberLite[]>(response);
 				return teamMembers;
 			} catch (Exception e) {
-				return new List<TeamMemberLite>();
+				return new TeamMemberLite[0];
 			}
 		}
 

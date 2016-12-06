@@ -6,6 +6,6 @@ namespace KitchenResponsible.Services
     public interface IKitchenResponsibleService
     {
         ResponsibleForWeek GetEmployeeForWeek();
-        IReadOnlyList<Week> GetWeeksWithResponsible();
+        Week[] GetWeeksWithResponsible();
     }
 }

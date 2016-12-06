@@ -38,6 +38,7 @@
     <Compile Include="ObservableEntityData.cs" />
     <Compile Include="TeamMemberLite.cs" />
     <Compile Include="TeamMember.cs" />
+    <Compile Include="Week.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Acquaint.ModelContracts\Acquaint.ModelContracts.csproj">

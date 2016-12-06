@@ -15,10 +15,11 @@ namespace KitchenResponsible.Services {
             this.weekNumberFinder = weekNumberFinder;   
         }
 
-        public IReadOnlyList<Week> GetWeeksWithResponsible() {
+        // TODO: More array, less readonly list
+        public Week[] GetWeeksWithResponsible() {
             // TODO: Hva med oppdatering ang uke????
             // TODO: CACHE
-            return repository.GetWeeksWithResponsible();
+            return repository.GetWeeksWithResponsible().ToArray();
         }
 
         public ResponsibleForWeek GetEmployeeForWeek() {

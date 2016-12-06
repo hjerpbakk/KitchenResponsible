@@ -266,6 +266,7 @@
     </Compile>
     <Compile Include="TabBarViewController.cs" />
     <Compile Include="KitchenResponsibleViewController.cs" />
+    <Compile Include="KitchenResponsibleTableViewSource.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
