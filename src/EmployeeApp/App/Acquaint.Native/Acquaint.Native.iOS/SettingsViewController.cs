@@ -38,8 +38,6 @@ namespace Acquaint.Native.iOS
 				}
 			};
 
-			NavigationController.ApplyStyle();
-
 			LoadValuesForFormFields();
 		}
 

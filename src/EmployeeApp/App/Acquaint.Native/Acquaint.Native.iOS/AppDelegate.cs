@@ -7,6 +7,7 @@ using Acquaint.Util;
 using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using Foundation;
+using Hjerpbakk.Common.iOS.UIKit;
 using HockeyApp.iOS;
 using Microsoft.Practices.ServiceLocation;
 using UIKit;
@@ -45,16 +46,14 @@ namespace Acquaint.Native.iOS
 #endif
 
 			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
+			// configure some style properties
+			SetTheme(application);
 
 			// intantiate a new instance of Window with the device's screen bounds
 			Window = new UIWindow(UIScreen.MainScreen.Bounds);
 
 			// Get an instance of the initial view controller from the storyboard. In our case, this is a UINavigationController.
 			var initialViewController = Storyboard.InstantiateInitialViewController();
-
-			// configure some style properties
-			// TODO: Var navigation bar her før...
-			(initialViewController as UINavigationController)?.ApplyStyle();
 
 			// Assign the initial view controller to Window's RootViewController property
 			Window.RootViewController = initialViewController;
@@ -156,6 +155,19 @@ namespace Acquaint.Native.iOS
 		public override void WillTerminate(UIApplication application)
 		{
 			// Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
+		}
+
+		void SetTheme(UIApplication application)
+		{
+			application.StatusBarStyle = UIStatusBarStyle.LightContent;
+			UINavigationBar.Appearance.TintColor = UIColor.White;
+			UINavigationBar.Appearance.BarTintColor = UIColor.Clear.FromHex(0xD32D28);
+			UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes { ForegroundColor = UIColor.White };
+
+			UIBarButtonItem.Appearance.SetTitleTextAttributes(new UITextAttributes { TextColor = UIColor.White }, UIControlState.Normal);
+
+			UITabBar.Appearance.TintColor = UINavigationBar.Appearance.TintColor;
+			UITabBar.Appearance.BarTintColor = UINavigationBar.Appearance.BarTintColor;
 		}
 	}
 }

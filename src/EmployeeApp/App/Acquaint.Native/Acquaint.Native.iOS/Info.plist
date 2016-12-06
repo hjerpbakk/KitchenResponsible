@@ -47,10 +47,12 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIStatusBarHidden</key>
-	<true/>
+	<false/>
 	<key>CFBundleShortVersionString</key>
 	<string>1.51</string>
 	<key>CFBundleVersion</key>
 	<string>1.51</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

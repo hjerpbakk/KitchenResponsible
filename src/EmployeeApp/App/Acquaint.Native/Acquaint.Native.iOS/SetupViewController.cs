@@ -28,8 +28,6 @@ namespace Acquaint.Native.iOS
 				"The phrase is a key that will separate your data from everyone else's data. Make it unique." +
 				"\n\n" +
 				"Enter this same phrase on any device running Acquaint that you'd like to sync data with.";
-
-			NavigationController.ApplyStyle();
 		}
 
 		void HandleDataPartitionPhraseEntryTouchUpInside(object sender, EventArgs ea)
