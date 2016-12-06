@@ -265,6 +265,7 @@
       <DependentUpon>SetupViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UINavigationControllerExtensions.cs" />
+    <Compile Include="TabBarViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

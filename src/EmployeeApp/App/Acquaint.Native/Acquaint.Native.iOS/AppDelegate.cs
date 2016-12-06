@@ -53,7 +53,8 @@ namespace Acquaint.Native.iOS
 			var initialViewController = Storyboard.InstantiateInitialViewController();
 
 			// configure some style properties
-			(initialViewController as UINavigationController).ApplyStyle();
+			// TODO: Var navigation bar her før...
+			(initialViewController as UINavigationController)?.ApplyStyle();
 
 			// Assign the initial view controller to Window's RootViewController property
 			Window.RootViewController = initialViewController;
