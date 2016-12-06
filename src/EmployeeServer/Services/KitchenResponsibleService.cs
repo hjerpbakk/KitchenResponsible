@@ -17,9 +17,22 @@ namespace KitchenResponsible.Services {
 
         // TODO: More array, less readonly list
         public Week[] GetWeeksWithResponsible() {
-            // TODO: Hva med oppdatering ang uke????
+            // TODO: Hva med oppdatering ang uke, ref. GetEmployeeForWeek
             // TODO: CACHE
-            return repository.GetWeeksWithResponsible().ToArray();
+            var weeksWithResponsible = repository.GetWeeksWithResponsible();
+            var lastWeek = GetLastWeek(weeksWithResponsible);
+            var newYear = new List<Week>();
+            var oldYear = new List<Week>();
+            for (int i = 0; i < weeksWithResponsible.Count; i++) {
+                if (weeksWithResponsible[i].WeekNumber <= lastWeek) {
+                    newYear.Add(weeksWithResponsible[i]);
+                } else {
+                    oldYear.Add(weeksWithResponsible[i]);
+                }
+            }
+
+            oldYear.AddRange(newYear);
+            return oldYear.ToArray();
         }
 
         public ResponsibleForWeek GetEmployeeForWeek() {
@@ -50,21 +63,7 @@ namespace KitchenResponsible.Services {
         }
 
         private void AddNewWeeks(IReadOnlyList<Week> weeksToDelete, IReadOnlyList<Week> weeksWithResponsible, IReadOnlyList<string> allTeamMembers) {              
-            ushort lastWeek = 0;
-            int prev = 0;
-            if (weeksWithResponsible.Last().WeekNumber == 52) {
-                for (int i = 0; i < 52; ++i) {
-                    if (weeksWithResponsible[i].WeekNumber - prev > 1) {
-                        lastWeek = weeksWithResponsible[i - 1].WeekNumber;
-                        break;
-                    } else {
-                        prev++;
-                    }
-                }
-            } else {
-                lastWeek = weeksWithResponsible.Last().WeekNumber;
-            }
-
+            var lastWeek = GetLastWeek(weeksWithResponsible);
             var teamMembersWithoutDuty = allTeamMembers.Where(t => !weeksWithResponsible.Any(w => w.Responsible == t)).ToArray();
             var newResponsiblesForWeeks = new Week[weeksToDelete.Count + teamMembersWithoutDuty.Length];
             var j = 0;
@@ -79,6 +78,21 @@ namespace KitchenResponsible.Services {
             }
 
             repository.RemovePastWeeksAndAddNewOnces(weeksToDelete.Select(w => w.WeekNumber).ToArray(), newResponsiblesForWeeks);
+        }
+
+        private ushort GetLastWeek(IReadOnlyList<Week> weeksWithResponsible) {
+            int prev = 0;
+            if (weeksWithResponsible.Last().WeekNumber == 52) {
+                for (int i = 0; i < 52; ++i) {
+                    if (weeksWithResponsible[i].WeekNumber - prev > 1) {
+                        return weeksWithResponsible[i - 1].WeekNumber;
+                    } else {
+                        prev++;
+                    }
+                }
+            } 
+
+            return weeksWithResponsible.Last().WeekNumber;
         }
     }
 }
