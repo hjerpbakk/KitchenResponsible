@@ -7,11 +7,18 @@ namespace KitchenResponsible.Utils.DateAndTime {
         /// This presumes that weeks start with Monday. 
         /// Week 1 is the 1st week of the year with a Thursday in it.
         /// </summary>
-        public ushort GetIso8601WeekOfYear() {
+        public ushort GetIso8601WeekOfYear() => 
+            GetIso8601WeekOfYear(DateTime.UtcNow);
+
+        public static ushort GetNextWeek(ushort week, ushort lastWeek) => 
+            week == lastWeek ? (ushort)1 : (ushort)(week + 1);
+        public static ushort GetPreviousWeek(ushort week, ushort lastWeek) => 
+            week == 1 ? (ushort)lastWeek : (ushort)(week - 1);
+
+        private static ushort GetIso8601WeekOfYear(DateTime time) {
             // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
             // be the same week# as whatever Thursday, Friday or Saturday are,
             // and we always get those right
-            var time = DateTime.UtcNow;
             DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(time);
             if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
             {
@@ -22,9 +29,8 @@ namespace KitchenResponsible.Utils.DateAndTime {
             return (ushort)CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
-        public static ushort GetNextWeek(ushort week) => week == 52 ? (ushort)1 : (ushort)(week + 1);
-
-        public static ushort GetPreviousWeek(ushort week) => week == 1 ? (ushort)52 : (ushort)(week - 1);
+        public static ushort GetLastWeekOfYear(int year) => 
+            GetIso8601WeekOfYear(new DateTime(year, 12, 31));
     }
 }
 
