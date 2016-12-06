@@ -14,7 +14,7 @@ namespace KitchenResponsible.Data {
             connectionString = "Filename=" + "Trondheim.db";
         }
 
-        public IList<string> GetNicks() {
+        public IReadOnlyList<string> GetNicks() {
             Thread.Sleep(500);
             using (var connection = OpenConnection()) {
                 connection.Open();
@@ -84,7 +84,6 @@ namespace KitchenResponsible.Data {
                 throw new ArgumentNullException(nameof(employee));
             }
 
-            // TODO: Må få kjøkkenskift
             using (var connection = OpenConnection()) {
                 var command = connection.CreateCommand();
                 command.CommandText = "INSERT INTO TeamMembers (Nick) VALUES (\"$nick\")";

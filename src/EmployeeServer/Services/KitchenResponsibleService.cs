@@ -18,10 +18,11 @@ namespace KitchenResponsible.Services {
         public ResponsibleForWeek GetEmployeeForWeek() {
             var week = weekNumberFinder.GetIso8601WeekOfYear();
             var weeksWithResponsible = repository.GetWeeksWithResponsible();
+            var allTeamMembers = repository.GetNicks();
             
             var weeksToDelete = RemovePastWeeks(week, weeksWithResponsible);
             if (weeksToDelete.Count > 0) {
-                AddNewWeeks(weeksToDelete, weeksWithResponsible);
+                AddNewWeeks(weeksToDelete, weeksWithResponsible, allTeamMembers);
             }
 
             var responsible = weeksWithResponsible.Single(w => w.WeekNumber == week).Responsible;
@@ -41,8 +42,7 @@ namespace KitchenResponsible.Services {
             return weeksToDelete;
         }
 
-        private void AddNewWeeks(IReadOnlyList<Week> weeksToDelete, IReadOnlyList<Week> weeksWithResponsible) {              
-            var newResponsiblesForWeeks = new Week[weeksToDelete.Count];
+        private void AddNewWeeks(IReadOnlyList<Week> weeksToDelete, IReadOnlyList<Week> weeksWithResponsible, IReadOnlyList<string> allTeamMembers) {              
             ushort lastWeek = 0;
             int prev = 0;
             if (weeksWithResponsible.Last().WeekNumber == 52) {
@@ -58,11 +58,19 @@ namespace KitchenResponsible.Services {
                 lastWeek = weeksWithResponsible.Last().WeekNumber;
             }
 
-            for (int i = 0; i < weeksToDelete.Count; i++) {
+            var teamMembersWithoutDuty = allTeamMembers.Where(t => !weeksWithResponsible.Any(w => w.Responsible == t)).ToArray();
+            var newResponsiblesForWeeks = new Week[weeksToDelete.Count + teamMembersWithoutDuty.Length];
+            var j = 0;
+            for (; j < teamMembersWithoutDuty.Length; j++) {
                 lastWeek = WeekNumberFinder.GetNextWeek(lastWeek);
-                newResponsiblesForWeeks[i] = new Week(lastWeek, weeksToDelete[i].Responsible);
+                newResponsiblesForWeeks[j] = new Week(lastWeek, teamMembersWithoutDuty[j]);
             }
             
+            for (; j < newResponsiblesForWeeks.Length; j++) {
+                lastWeek = WeekNumberFinder.GetNextWeek(lastWeek);
+                newResponsiblesForWeeks[j] = new Week(lastWeek, weeksToDelete[j - teamMembersWithoutDuty.Length].Responsible);
+            }
+
             repository.RemovePastWeeksAndAddNewOnces(weeksToDelete.Select(w => w.WeekNumber).ToArray(), newResponsiblesForWeeks);
         }
     }
