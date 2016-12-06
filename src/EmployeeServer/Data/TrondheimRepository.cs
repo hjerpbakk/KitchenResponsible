@@ -30,6 +30,7 @@ namespace KitchenResponsible.Data {
                 return nicks;
             }
         }
+        
         public IReadOnlyList<Week> GetWeeksWithResponsible() {
             Thread.Sleep(500);
             using (var connection = OpenConnection()) {
