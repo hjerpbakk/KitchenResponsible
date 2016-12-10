@@ -8,10 +8,18 @@ namespace Acquaint.Native.iOS
 	[Register("KitchenResponsibleViewController")]
 	public class KitchenResponsibleViewController : UITableViewController
 	{
+		public static readonly NSString WeekCellId;
+
 		readonly KitchenResponsibleTableViewSource tableViewSource;
+
+		static KitchenResponsibleViewController()
+		{
+			WeekCellId = new NSString("WeekCell");
+		}
 
 		public KitchenResponsibleViewController(IntPtr handle) : base(handle)
 		{
+			TableView.RegisterClassForCellReuse(typeof(WeekCell), WeekCellId);
 			tableViewSource = new KitchenResponsibleTableViewSource();
 		}
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Acquaint.Data;
-using Acquaint.Models;
 using Foundation;
 using UIKit;
 
@@ -12,37 +11,21 @@ namespace Acquaint.Native.iOS
 		string[] titles;
 		string[] cellContent;
 
-		public KitchenResponsibleTableViewSource()
-		{
-		}
-
 		public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 		{
-			// TODO: create proper cell
-			//var cell = tableView.DequeueReusableCell("WeekCell", indexPath) as UITableViewCell;
-			var cell = new UITableViewCell(UITableViewCellStyle.Value1, "WeekCell");
+			var cell = (WeekCell)tableView.DequeueReusableCell(KitchenResponsibleViewController.WeekCellId, indexPath);
 			cell.TextLabel.Text = cellContent[indexPath.Section];
-			//cell.DetailTextLabel.Text = weeksWithResponsible[indexPath.Row].WeekNumber.ToString();
 			return cell;
 		}
 
 		public override nint RowsInSection(UITableView tableview, nint section) =>
 			cellContent.Length == 0 ? 0 : 1;
 
-		public override nint NumberOfSections(UITableView tableView)
-		{
-			return cellContent == null ? 0 : cellContent.Length;
-		}
+		public override nint NumberOfSections(UITableView tableView) =>
+			cellContent == null ? 0 : cellContent.Length;
 
-		//public override string[] SectionIndexTitles(UITableView tableView)
-		//{
-		//	return titles;
-		//}
-
-		public override string TitleForHeader(UITableView tableView, nint section)
-		{
-			return titles[section];
-		}
+		public override string TitleForHeader(UITableView tableView, nint section) =>
+			titles[section];
 
 		public async Task LoadKitchenResponsibles()
 		{
