@@ -20,6 +20,8 @@ namespace Acquaint.Native.iOS
 		public KitchenResponsibleViewController(IntPtr handle) : base(handle)
 		{
 			TableView.RegisterClassForCellReuse(typeof(WeekCell), WeekCellId);
+			TableView.AllowsSelection = false;
+
 			tableViewSource = new KitchenResponsibleTableViewSource();
 		}
 
