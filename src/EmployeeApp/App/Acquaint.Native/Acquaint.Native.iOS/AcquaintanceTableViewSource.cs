@@ -46,7 +46,6 @@ namespace Acquaint.Native.iOS
 			Acquaintances = (await new TeamMemberService().Get()).ToList();
 		}
 
-		#region implemented abstract members of UITableViewSource
 
 		/// <summary>
 		/// Gets the cell.
@@ -80,8 +79,6 @@ namespace Acquaint.Native.iOS
 
 			return 0;
 		}
-
-		#endregion
 	}
 }
 
