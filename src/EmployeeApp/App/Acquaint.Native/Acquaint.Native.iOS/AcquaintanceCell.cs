@@ -31,6 +31,7 @@ namespace Acquaint.Native.iOS
 			JobTitleLabel.Text = acquaintance.JobTitle;
 
 			InvokeOnMainThread(async () => {
+				// TODO: Denne krasjer dersom DNS resolve feiler...
 				// use FFImageLoading library to asynchronously:
 				await ImageService
 					.Instance
