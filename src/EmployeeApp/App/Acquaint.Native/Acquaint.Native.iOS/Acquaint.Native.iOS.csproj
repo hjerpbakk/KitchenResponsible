@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
+    <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -24,9 +24,9 @@
     <MtouchUseRefCounting>True</MtouchUseRefCounting>
     <MtouchUseSGen>True</MtouchUseSGen>
     <MtouchFastDev>True</MtouchFastDev>
-    <MtouchDebug>True</MtouchDebug>
+    <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchProfiling>True</MtouchProfiling>
+    <MtouchProfiling>false</MtouchProfiling>
     <MtouchI18n>other</MtouchI18n>
     <MtouchSdkVersion>10.1</MtouchSdkVersion>
     <MtouchUseLlvm>False</MtouchUseLlvm>
@@ -55,7 +55,7 @@
     <MtouchI18n>other</MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <DebugType>full</DebugType>
+    <DebugType></DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
@@ -85,7 +85,7 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchUseSGen>true</MtouchUseSGen>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
-    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchProfiling>false</MtouchProfiling>
     <BuildIpa>true</BuildIpa>
     <IpaPackageName></IpaPackageName>
     <MtouchI18n>other</MtouchI18n>
