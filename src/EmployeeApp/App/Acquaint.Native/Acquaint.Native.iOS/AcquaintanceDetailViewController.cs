@@ -21,11 +21,6 @@ namespace Acquaint.Native.iOS {
 	/// Acquaintance detail view controller. The layout for this view controller is defined almost entirely in Main.storyboard.
 	/// </summary>
 	public partial class AcquaintanceDetailViewController : UIViewController {
-		/// <summary>
-		/// The data source.
-		/// </summary>
-		IDataSource<Acquaintance> _DataSource;
-
 		UIBarButtonItem DeleteBarButtonItem;
 
 		TeamMember teamMember;
@@ -35,7 +30,7 @@ namespace Acquaint.Native.iOS {
 
 		// This constructor signature is required, for marshalling between the managed and native instances of this class.
 		public AcquaintanceDetailViewController(IntPtr handle) : base(handle) {
-			_DataSource = ServiceLocator.Current.GetInstance<IDataSource<Acquaintance>>();
+			//_DataSource = ServiceLocator.Current.GetInstance<IDataSource<Acquaintance>>();
 			_Geocoder = new CLGeocoder();
 			teamMemberService = new TeamMemberService();
 		}

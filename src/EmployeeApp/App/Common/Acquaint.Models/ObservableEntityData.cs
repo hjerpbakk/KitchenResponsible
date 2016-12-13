@@ -1,6 +1,5 @@
 ﻿using System;
 using Acquaint.Abstractions;
-using Microsoft.WindowsAzure.MobileServices;
 using MvvmHelpers;
 using Newtonsoft.Json;
 
@@ -19,13 +18,10 @@ namespace Acquaint.Models
 		[JsonProperty(PropertyName = "id")]
 		public string Id { get; set; }
 
-		[CreatedAt]
 		public DateTimeOffset CreatedAt { get; set; }
 
-		[UpdatedAt]
 		public DateTimeOffset UpdatedAt { get; set; }
 
-		[Version]
 		public byte[] Version { get; set; }
 	}
 }

@@ -10,11 +10,6 @@ namespace Acquaint.Native.iOS
 	public partial class AcquaintanceEditViewController : UITableViewController
 	{
 		/// <summary>
-		/// The data source.
-		/// </summary>
-		IDataSource<Acquaintance> _DataSource;
-
-		/// <summary>
 		/// A flag indicating that we're editing a new Acquaintance.
 		/// </summary>
 		bool _IsNew;
@@ -32,7 +27,6 @@ namespace Acquaint.Native.iOS
 
 		public AcquaintanceEditViewController(IntPtr handle) : base(handle)
 		{
-			_DataSource = ServiceLocator.Current.GetInstance<IDataSource<Acquaintance>>();
 		}
 
 		public override void ViewWillAppear(bool animated)
@@ -88,10 +82,10 @@ namespace Acquaint.Native.iOS
 					_Acquaintance.PostalCode = _ZipField.Text;
 
 
-					if (_IsNew)
-						await _DataSource.AddItem(_Acquaintance);
-					else
-						await _DataSource.UpdateItem(_Acquaintance);
+					//if (_IsNew)
+					//	await _DataSource.AddItem(_Acquaintance);
+					//else
+					//	await _DataSource.UpdateItem(_Acquaintance);
 
 					NavigationController.PopViewController(true);
 				}

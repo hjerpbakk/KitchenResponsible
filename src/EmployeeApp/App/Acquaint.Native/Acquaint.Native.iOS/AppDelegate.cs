@@ -32,15 +32,10 @@ namespace Acquaint.Native.iOS
 		{
 			RegisterDependencies();
 
-			Settings.OnDataPartitionPhraseChanged += (sender, e) => {
-				UpdateDataSourceIfNecessary();
-			};
-
 #if ENABLE_TEST_CLOUD
 			Xamarin.Calabash.Start();
 #endif
 
-			Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init();
 			// configure some style properties
 			SetTheme(application);
 
@@ -76,50 +71,11 @@ namespace Acquaint.Native.iOS
 
             builder.RegisterInstance(new DatastoreFolderPathProvider()).As<IDatastoreFolderPathProvider>();
 
-			// Set the data source dependent on whether or not the data parition phrase is "UseLocalDataSource".
-			// The local data source is mainly for use in TestCloud test runs, but the app can be used in local-only data mode if desired.
-			if (Settings.IsUsingLocalDataSource)
-                builder.RegisterInstance(_LazyFilesystemOnlyAcquaintanceDataSource.Value).As<IDataSource<Acquaintance>>();
-            else
-                builder.RegisterInstance(_LazyAzureAcquaintanceSource.Value).As<IDataSource<Acquaintance>>();
-
-            _IoCContainer = builder.Build();
+			_IoCContainer = builder.Build();
 
             var csl = new AutofacServiceLocator(_IoCContainer);
             ServiceLocator.SetLocatorProvider(() => csl);
         }
-
-        /// <summary>
-		/// Updates the data source if necessary.
-		/// </summary>
-		void UpdateDataSourceIfNecessary()
-        {
-            var dataSource = ServiceLocator.Current.GetInstance<IDataSource<Acquaintance>>();
-
-			// Set the data source dependent on whether or not the data parition phrase is "UseLocalDataSource".
-			// The local data source is mainly for use in TestCloud test runs, but the app can be used in local-only data mode if desired.
-
-			// if the settings dictate that a local data source should be used, then register the local data provider and update the IoC container
-			if (Settings.IsUsingLocalDataSource && !(dataSource is FilesystemOnlyAcquaintanceDataSource))
-            {
-                var builder = new ContainerBuilder();
-                builder.RegisterInstance(_LazyFilesystemOnlyAcquaintanceDataSource.Value).As<IDataSource<Acquaintance>>();
-                builder.Update(_IoCContainer);
-                return;
-            }
-
-            // if the settings dictate that a local data souce should not be used, then register the remote data source and update the IoC container
-            if (!Settings.IsUsingLocalDataSource && !(dataSource is AzureAcquaintanceSource))
-            {
-                var builder = new ContainerBuilder();
-                builder.RegisterInstance(_LazyAzureAcquaintanceSource.Value).As<IDataSource<Acquaintance>>();
-                builder.Update(_IoCContainer);
-            }
-        }
-
-        // we need lazy loaded instances of these two types hanging around because if the registration on IoC container changes at runtime, we want the same instances
-        static Lazy<FilesystemOnlyAcquaintanceDataSource> _LazyFilesystemOnlyAcquaintanceDataSource = new Lazy<FilesystemOnlyAcquaintanceDataSource>(() => new FilesystemOnlyAcquaintanceDataSource());
-        static Lazy<AzureAcquaintanceSource> _LazyAzureAcquaintanceSource = new Lazy<AzureAcquaintanceSource>(() => new AzureAcquaintanceSource());
 
         public override void OnResignActivation(UIApplication application)
 		{

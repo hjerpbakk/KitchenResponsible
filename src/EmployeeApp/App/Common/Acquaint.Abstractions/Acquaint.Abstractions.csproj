@@ -34,7 +34,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IHttpClientHandlerFactory.cs" />
     <Compile Include="IObservableEntityData.cs" />
-    <Compile Include="IDataSource.cs" />
     <Compile Include="ICapabilityService.cs" />
     <Compile Include="IEnvironmentService.cs" />
     <Compile Include="IDatastoreFolderPathProvider.cs" />
