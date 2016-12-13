@@ -12,6 +12,7 @@ namespace Acquaint.Native.iOS
 	{
 		public WeekCell(IntPtr p) : base(p)
   		{
+			
 		}
 	}
 }
