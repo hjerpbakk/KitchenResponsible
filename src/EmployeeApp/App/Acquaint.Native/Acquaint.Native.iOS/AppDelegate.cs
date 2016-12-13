@@ -8,7 +8,6 @@ using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using Foundation;
 using Hjerpbakk.Common.iOS.UIKit;
-using HockeyApp.iOS;
 using Microsoft.Practices.ServiceLocation;
 using UIKit;
 
@@ -31,10 +30,6 @@ namespace Acquaint.Native.iOS
 		// Method invoked after the application has launched to configure the main window and view controller.
 		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
-			var manager = BITHockeyManager.SharedHockeyManager;
-			manager.Configure(Settings.HockeyAppId);
-			manager.StartManager();
-
 			RegisterDependencies();
 
 			Settings.OnDataPartitionPhraseChanged += (sender, e) => {

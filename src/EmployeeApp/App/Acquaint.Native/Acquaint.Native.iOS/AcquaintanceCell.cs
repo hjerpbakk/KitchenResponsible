@@ -21,7 +21,7 @@ namespace Acquaint.Native.iOS
 		/// Update the cell's child views' values and presentation.
 		/// </summary>
 		/// <param name="acquaintance">Acquaintance.</param>
-		public void Update(TeamMemberLite acquaintance)
+		public async void Update(TeamMemberLite acquaintance)
 		{
 			// set disclousure indicator accessory for the cell
 			Accessory = UITableViewCellAccessory.DisclosureIndicator;
@@ -30,17 +30,21 @@ namespace Acquaint.Native.iOS
 			CompanyLabel.Text = acquaintance.Company;
 			JobTitleLabel.Text = acquaintance.JobTitle;
 
-			InvokeOnMainThread(async () => {
-				// TODO: Denne krasjer dersom DNS resolve feiler...
-				// use FFImageLoading library to asynchronously:
+			// TODO: Denne krasjer dersom DNS resolve feiler... Må sjekkes på nytt etter den nye versjonen...
+			try
+			{
 				await ImageService
-					.Instance
-					.LoadUrl(acquaintance.SmallPhotoUrl, TimeSpan.FromHours(Settings.ImageCacheDurationHours))  // get the image from a URL
-					.LoadingPlaceholder("placeholderProfileImage.png")                                          // specify a placeholder image
-					.Transform(new CircleTransformation())                                                      // transform the image to a circle
-					.Error(e => System.Diagnostics.Debug.WriteLine(e.Message))
-					.IntoAsync(ProfilePhotoImageView);
-			});
+				.Instance
+				.LoadUrl(acquaintance.SmallPhotoUrl, TimeSpan.FromHours(Settings.ImageCacheDurationHours))  // get the image from a URL
+				.LoadingPlaceholder("placeholderProfileImage.png")                                          // specify a placeholder image
+				.Transform(new CircleTransformation())                                                      // transform the image to a circle
+				.Error(e => System.Diagnostics.Debug.WriteLine(e.Message))
+				.IntoAsync(ProfilePhotoImageView);
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine(ex.Message);
+			}
 		}
 	}
 }

@@ -109,12 +109,6 @@ namespace Acquaint.Util
 			set { AppSettings.AddOrUpdateValue<bool>(DataIsSeededKey, value); }
 		}
 
-		public static string HockeyAppId
-		{
-			get { return AppSettings.GetValueOrDefault<string>(HockeyAppIdKey, HockeyAppIdDefault); }
-			set { AppSettings.AddOrUpdateValue<string>(HockeyAppIdKey, value); }
-		}
-
         public static string BingMapsKey
         {
             get { return AppSettings.GetValueOrDefault<string>(BingMapsKeyKey, BingMapsKeyDefault); }
