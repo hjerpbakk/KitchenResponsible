@@ -38,8 +38,6 @@
     <Compile Include="IEnvironmentService.cs" />
     <Compile Include="IDatastoreFolderPathProvider.cs" />
     <Compile Include="IDataSyncConflictMessagePresenter.cs" />
-    <Compile Include="DataSyncErrorEventArgs.cs" />
-    <Compile Include="DataSyncErrorEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Acquaint.ModelContracts\Acquaint.ModelContracts.csproj">
