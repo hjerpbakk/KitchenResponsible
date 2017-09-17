@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleService", "KitchenResponsibleService\KitchenResponsibleService.csproj", "{8A600012-FBB0-4E67-84C5-F0EA2644A13C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
