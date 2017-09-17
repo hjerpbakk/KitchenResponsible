@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KitchenResponsibleService.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitchenResponsibleService.Controllers
@@ -11,9 +12,11 @@ namespace KitchenResponsibleService.Controllers
     {
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<EmployeeWeek> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new EmployeeWeek[] { 
+                new EmployeeWeek { WeekNumber = 41, SlackUser = "U1TBU8336" },
+                new EmployeeWeek { WeekNumber = 42, SlackUser = "U1TBU8336" }};
         }
 
         // GET api/values/5
