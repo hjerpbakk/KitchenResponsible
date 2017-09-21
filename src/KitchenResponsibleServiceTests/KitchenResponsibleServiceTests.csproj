@@ -16,4 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KitchenResponsibleService\KitchenResponsibleService.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
 </Project>

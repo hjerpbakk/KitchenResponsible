@@ -24,8 +24,7 @@ namespace KitchenResponsibleService.Model
         }
 
         public static string Parse(IEnumerable<ResponsibleForWeek> weeksAndResponsibles) {
-            // TODO: implement
-            return "";
+            return string.Join("\n", weeksAndResponsibles.Select(w => $"{w.WeekNumber} {w.SlackUserId}"));
         }
 
         public bool Equals(ResponsibleForWeek other) =>

@@ -31,7 +31,7 @@ namespace KitchenResponsibleService
             services.AddMvc();
 
             services.AddSingleton(ReadBlobStorageConfig());
-            services.AddSingleton<BlobStorage>();
+            services.AddSingleton<IStorage, BlobStorage>();
             services.AddSingleton<KitchenService>();
         }
 

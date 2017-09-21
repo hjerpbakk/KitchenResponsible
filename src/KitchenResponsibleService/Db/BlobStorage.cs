@@ -53,7 +53,7 @@ namespace KitchenResponsibleService.Db
 
         public async Task<string[]> GetEmployees() {
 			var token = new BlobContinuationToken();
-			var blobs = await kitchenContainer.ListBlobsSegmentedAsync(token);
+			var blobs = await employeesContainer.ListBlobsSegmentedAsync(token);
             var employees = new List<string>();
             foreach (var blob in blobs.Results.Cast<CloudBlockBlob>())
             {
