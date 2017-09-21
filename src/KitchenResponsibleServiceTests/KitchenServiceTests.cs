@@ -45,5 +45,31 @@ namespace KitchenResponsibleServiceTests
 
             storageFake.Verify(s => s.Save(It.IsAny<List<ResponsibleForWeek>>()), Times.Once());
         }
+
+		[Fact]
+		public async Task GetWeeksAndResponsibles()
+		{
+			ConfigurableDateTime.CurrentTime = new DateTime(2017, 9, 20);
+			var employees = new List<string> { "Runar", "Phuong", "Malin" };
+			var initialWeeksAndResponsibles = new List<ResponsibleForWeek> {
+				new ResponsibleForWeek(37, "Malin"),
+				new ResponsibleForWeek(38, "Runar")
+			};
+			var expectedWeeksAndResponsibles = new List<ResponsibleForWeek> {
+				new ResponsibleForWeek(38, "Runar"),
+				new ResponsibleForWeek(39, "Phuong"),
+				new ResponsibleForWeek(40, "Malin"),
+			};
+
+			var storageFake = new Mock<IStorage>();
+			storageFake.Setup(s => s.GetEmployees()).ReturnsAsync(() => employees.ToArray());
+			storageFake.Setup(s => s.GetWeeksAndResponsibles()).ReturnsAsync(initialWeeksAndResponsibles);
+
+			var kitchenService = new KitchenService(storageFake.Object);
+
+            var weeksAndResponsibles = await kitchenService.GetWeeksAndResponsibles();
+
+            Assert.Equal(expectedWeeksAndResponsibles, weeksAndResponsibles);
+		}
     }
 }

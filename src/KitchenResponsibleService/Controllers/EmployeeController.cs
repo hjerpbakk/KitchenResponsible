@@ -10,11 +10,11 @@ namespace KitchenResponsibleService.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : Controller
     {
-		readonly KitchenService kitcenService;
+		readonly KitchenService kitchenService;
 
-		public EmployeeController(KitchenService kitcenService)
+		public EmployeeController(KitchenService kitchenService)
 		{
-			this.kitcenService = kitcenService;
+            this.kitchenService = kitchenService;
 		}
 
 		// POST api/values

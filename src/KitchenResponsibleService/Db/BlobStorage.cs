@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using KitchenResponsibleService.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System.Globalization;
 using KitchenResponsibleService.Model;
 
 namespace KitchenResponsibleService.Db

@@ -21,11 +21,15 @@ namespace KitchenResponsibleService.Services
             await RemoveOldWeeksAndFillWithFreeEmployees();
 		}
 
-        async Task RemoveOldWeeksAndFillWithFreeEmployees() {
+        public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles() =>
+            await RemoveOldWeeksAndFillWithFreeEmployees(); 
+
+        async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
             RemoveOldWeeks(weeksWithResponisbles);
             await GiveWeeksToFreeEmployees(weeksWithResponisbles);
 			await blobStorage.Save(weeksWithResponisbles);
+            return weeksWithResponisbles;
         }
 
         void RemoveOldWeeks(List<ResponsibleForWeek> weeksAndResponsibles) {

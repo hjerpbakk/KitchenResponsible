@@ -10,22 +10,16 @@ namespace KitchenResponsibleService.Controllers
     [Route("api/[controller]")]
     public class KitchenController : Controller
     {
-        readonly KitchenService kitcenService;
+        readonly KitchenService kitchenService;
 
-        public KitchenController(KitchenService kitcenService)
+        public KitchenController(KitchenService kitchenService)
         {
-            this.kitcenService = kitcenService;
+            this.kitchenService = kitchenService;
         }
 
         // GET api/kitchen
         [HttpGet]
-		public async Task<IEnumerable<ResponsibleForWeek>> Get()
-		{
-            await kitcenService.AddNewEmployee("");
-			return new ResponsibleForWeek[] {
-                new ResponsibleForWeek(41, "U1TBU8336"),
-                new ResponsibleForWeek(42, "U1TBU8336")};
-		}
-
+        public async Task<IEnumerable<ResponsibleForWeek>> Get() =>
+            await kitchenService.GetWeeksAndResponsibles();
     }
 }
