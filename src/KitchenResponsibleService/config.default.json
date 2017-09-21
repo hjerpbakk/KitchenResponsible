@@ -1,0 +1,5 @@
+﻿{
+  "blobStorageAccessKey": "[blobStorageAccessKey]",
+  "blobStorageAccountName": "[blobStorageAccountName]",
+  "endpointSuffix": "[endpointSuffix]"
+}

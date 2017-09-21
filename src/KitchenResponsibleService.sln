@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleService", "KitchenResponsibleService\KitchenResponsibleService.csproj", "{8A600012-FBB0-4E67-84C5-F0EA2644A13C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleServiceTests", "KitchenResponsibleServiceTests\KitchenResponsibleServiceTests.csproj", "{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,9 @@ Global
 		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A600012-FBB0-4E67-84C5-F0EA2644A13C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

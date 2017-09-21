@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using KitchenResponsibleService.Configuration;
+using KitchenResponsibleService.Db;
+using KitchenResponsibleService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace KitchenResponsibleService
 {
@@ -24,6 +29,10 @@ namespace KitchenResponsibleService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddSingleton(ReadBlobStorageConfig());
+            services.AddSingleton<BlobStorage>();
+            services.AddSingleton<KitchenService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,5 +45,10 @@ namespace KitchenResponsibleService
 
             app.UseMvc();
         }
+
+		static BlobStorageConfiguration ReadBlobStorageConfig()
+		{
+			return JsonConvert.DeserializeObject<BlobStorageConfiguration>(File.ReadAllText("config.json"));
+		}
     }
 }
