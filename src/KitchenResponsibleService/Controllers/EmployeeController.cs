@@ -19,7 +19,7 @@ namespace KitchenResponsibleService.Controllers
 
         // POST api/kitchen
         [HttpPost]
-        public Task Post([FromBody]string employeeId) =>
-            kitchenService.AddNewEmployee(employeeId);
+        public async Task Post([FromBody]string employeeId) =>
+            await kitchenService.AddNewEmployee(employeeId);
     }
 }

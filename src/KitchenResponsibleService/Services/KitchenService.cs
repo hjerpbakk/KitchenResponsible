@@ -17,6 +17,10 @@ namespace KitchenResponsibleService.Services
         }
 
         public async Task AddNewEmployee(string employeeId) {
+            if (employeeId == null) {
+                throw new ArgumentNullException(nameof(employeeId));
+            }
+
             await blobStorage.AddNewEmployee(employeeId);
             await RemoveOldWeeksAndFillWithFreeEmployees();
 		}
@@ -45,7 +49,7 @@ namespace KitchenResponsibleService.Services
             var week = GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow);
             foreach (var employee in employees)
             {
-                if (weeksAndResponsibles.FindIndex(w => w.SlackUserId == employee) == -1) {
+                if (weeksAndResponsibles.FindIndex(w => w.SlackUser == employee) == -1) {
                     week = GetNextWeek(week);
                     weeksAndResponsibles.Add(new ResponsibleForWeek(week, employee));
                 }
