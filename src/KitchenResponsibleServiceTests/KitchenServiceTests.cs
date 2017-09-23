@@ -71,5 +71,50 @@ namespace KitchenResponsibleServiceTests
 
             Assert.Equal(expectedWeeksAndResponsibles, weeksAndResponsibles);
 		}
+
+        [Fact]
+        public async Task GetWeekForUser()
+        {
+			ConfigurableDateTime.CurrentTime = new DateTime(2017, 9, 20);
+			var employees = new List<string> { "Runar", "Phuong", "Malin" };
+			var initialWeeksAndResponsibles = new List<ResponsibleForWeek> {
+				new ResponsibleForWeek(37, "Malin"),
+				new ResponsibleForWeek(38, "Runar"),
+                new ResponsibleForWeek(39, "Phuong"),
+			};
+	
+			var storageFake = new Mock<IStorage>();
+			storageFake.Setup(s => s.GetEmployees()).ReturnsAsync(() => employees.ToArray());
+			storageFake.Setup(s => s.GetWeeksAndResponsibles()).ReturnsAsync(initialWeeksAndResponsibles);
+
+			var kitchenService = new KitchenService(storageFake.Object);
+
+            var weekForPhuong = await kitchenService.GetWeekForUser("Phuong");
+
+            Assert.Equal(39, weekForPhuong.WeekNumber);
+            Assert.Equal("Phuong", weekForPhuong.SlackUser);
+        }
+
+		[Fact]
+		public async Task GetWeekForUser_UserHasNoWeek()
+		{
+			ConfigurableDateTime.CurrentTime = new DateTime(2017, 9, 20);
+			var employees = new List<string> { "Runar", "Malin" };
+			var initialWeeksAndResponsibles = new List<ResponsibleForWeek> {
+				new ResponsibleForWeek(37, "Malin"),
+				new ResponsibleForWeek(38, "Runar")
+			};
+
+			var storageFake = new Mock<IStorage>();
+			storageFake.Setup(s => s.GetEmployees()).ReturnsAsync(() => employees.ToArray());
+			storageFake.Setup(s => s.GetWeeksAndResponsibles()).ReturnsAsync(initialWeeksAndResponsibles);
+
+			var kitchenService = new KitchenService(storageFake.Object);
+
+			var weekForPhuong = await kitchenService.GetWeekForUser("Phuong");
+
+			Assert.Equal(0, weekForPhuong.WeekNumber);
+			Assert.Equal("Phuong", weekForPhuong.SlackUser);
+		}
     }
 }

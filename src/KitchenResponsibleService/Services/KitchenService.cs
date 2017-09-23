@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -27,6 +28,21 @@ namespace KitchenResponsibleService.Services
 
         public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles() =>
             await RemoveOldWeeksAndFillWithFreeEmployees(); 
+
+        public async Task<ResponsibleForWeek> GetWeekForUser(string employeeId) {
+			if (employeeId == null)
+			{
+				throw new ArgumentNullException(nameof(employeeId));
+			}
+
+            var weeksWithResponisbles = await RemoveOldWeeksAndFillWithFreeEmployees();
+            var weekForUser = weeksWithResponisbles.SingleOrDefault(w => w.SlackUser == employeeId);
+            if (weekForUser.SlackUser == null) {
+                return new ResponsibleForWeek(0, employeeId);
+            }
+
+            return weekForUser;
+		}
 
         async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
