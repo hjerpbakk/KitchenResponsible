@@ -17,10 +17,9 @@ namespace KitchenResponsibleService.Controllers
             this.kitchenService = kitchenService;
 		}
 
-		// POST api/values
-		[HttpPost]
-		public void Post([FromBody]string value)
-		{
-		}
+        // POST api/kitchen
+        [HttpPost]
+        public Task Post([FromBody]string employeeId) =>
+            kitchenService.AddNewEmployee(employeeId);
     }
 }
