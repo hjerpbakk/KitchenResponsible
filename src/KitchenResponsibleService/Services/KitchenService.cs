@@ -53,7 +53,7 @@ namespace KitchenResponsibleService.Services
             var weekForUser = weeksWithResponisbles.SingleOrDefault(w => w.WeekNumber == weekNumber);
 			if (weekForUser.SlackUser == null)
 			{
-				return new ResponsibleForWeek();
+				return new ResponsibleForWeek(weekNumber, null);
 			}
 
 			return weekForUser;
