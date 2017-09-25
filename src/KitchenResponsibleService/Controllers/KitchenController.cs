@@ -21,11 +21,5 @@ namespace KitchenResponsibleService.Controllers
         [HttpGet]
         public async Task<IEnumerable<ResponsibleForWeek>> Get() =>
             await kitchenService.GetWeeksAndResponsibles();
-
-
-        // GET api/kitchen/5
-        [HttpGet("{employeeId}")]
-        public async Task<ResponsibleForWeek> Get(string employeeId) =>
-            await kitchenService.GetWeekForUser(employeeId);
     }
 }

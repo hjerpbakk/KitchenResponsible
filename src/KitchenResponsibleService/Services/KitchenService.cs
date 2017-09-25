@@ -29,7 +29,7 @@ namespace KitchenResponsibleService.Services
         public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles() =>
             await RemoveOldWeeksAndFillWithFreeEmployees(); 
 
-        public async Task<ResponsibleForWeek> GetWeekForUser(string employeeId) {
+        public async Task<ResponsibleForWeek> GetWeekAndResponsibleForEmployee(string employeeId) {
 			if (employeeId == null)
 			{
 				throw new ArgumentNullException(nameof(employeeId));
@@ -43,6 +43,24 @@ namespace KitchenResponsibleService.Services
 
             return weekForUser;
 		}
+
+        public async Task<ResponsibleForWeek> GetWeekAndResponsibleForWeek(ushort weekNumber) {
+            if (weekNumber <= 0 || weekNumber > 52) {
+                throw new ArgumentOutOfRangeException(nameof(weekNumber));
+            }
+
+			var weeksWithResponisbles = await RemoveOldWeeksAndFillWithFreeEmployees();
+            var weekForUser = weeksWithResponisbles.SingleOrDefault(w => w.WeekNumber == weekNumber);
+			if (weekForUser.SlackUser == null)
+			{
+				return new ResponsibleForWeek();
+			}
+
+			return weekForUser;
+        }
+
+        public async Task<ResponsibleForWeek> GetWeekAndResponsibleForCurrentWeek() =>
+            await GetWeekAndResponsibleForWeek(GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow));
 
         async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
@@ -62,7 +80,14 @@ namespace KitchenResponsibleService.Services
 
         async Task GiveWeeksToFreeEmployees(List<ResponsibleForWeek> weeksAndResponsibles) {
             var employees = await blobStorage.GetEmployees();
-            var week = GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow);
+            ushort week;
+            var lastWeekWithResponsible = weeksAndResponsibles.LastOrDefault();
+            if (lastWeekWithResponsible.WeekNumber == 0) {
+                week = GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow);    
+            } else {
+                week = lastWeekWithResponsible.WeekNumber;
+            }
+
             foreach (var employee in employees)
             {
                 if (weeksAndResponsibles.FindIndex(w => w.SlackUser == employee) == -1) {

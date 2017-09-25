@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using KitchenResponsibleService.Model;
 using KitchenResponsibleService.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +15,14 @@ namespace KitchenResponsibleService.Controllers
             this.kitchenService = kitchenService;
 		}
 
-        // POST api/kitchen
+        // POST api/employee
         [HttpPost]
         public async Task Post([FromBody]string employeeId) =>
             await kitchenService.AddNewEmployee(employeeId);
+
+		// GET api/employee/5
+		[HttpGet("{employeeId}")]
+		public async Task<ResponsibleForWeek> Get(string employeeId) =>
+			await kitchenService.GetWeekAndResponsibleForEmployee(employeeId);
     }
 }

@@ -29,5 +29,9 @@ namespace KitchenResponsibleService.Model
 
         public bool Equals(ResponsibleForWeek other) =>
             WeekNumber == other.WeekNumber && SlackUser == other.SlackUser;
+
+        public override string ToString() =>
+            string.Format("[ResponsibleForWeek: WeekNumber={0}, SlackUser={1}]", WeekNumber, SlackUser);
+        
     }
 }
