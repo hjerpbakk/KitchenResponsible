@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceRoot}/KitchenResponsibleService/bin/Debug/netcoreapp2.0/KitchenResponsibleService.dll",
+            "program": "${workspaceRoot}/src/KitchenResponsibleService/bin/Debug/netcoreapp2.0/KitchenResponsibleService.dll",
             "args": [],
-            "cwd": "${workspaceRoot}/KitchenResponsibleService",
+            "cwd": "${workspaceRoot}/src/KitchenResponsibleService",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {

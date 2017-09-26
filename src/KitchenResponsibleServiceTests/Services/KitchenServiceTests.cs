@@ -158,7 +158,7 @@ namespace KitchenResponsibleServiceTests.Services
 
 			var weekForPhuong = await kitchenService.GetWeekAndResponsibleForWeek(40);
 
-			Assert.Equal(0, weekForPhuong.WeekNumber);
+			Assert.Equal(40, weekForPhuong.WeekNumber);
             Assert.Null(weekForPhuong.SlackUser);
 		}
 
@@ -203,7 +203,7 @@ namespace KitchenResponsibleServiceTests.Services
 
 			var weekAndResponsibleForCurrentWeek = await kitchenService.GetWeekAndResponsibleForCurrentWeek();
 
-			Assert.Equal(0, weekAndResponsibleForCurrentWeek.WeekNumber);
+			Assert.Equal(42, weekAndResponsibleForCurrentWeek.WeekNumber);
 			Assert.Null(weekAndResponsibleForCurrentWeek.SlackUser);
 		}
     }

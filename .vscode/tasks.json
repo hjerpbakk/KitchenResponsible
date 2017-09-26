@@ -7,17 +7,10 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/KitchenResponsibleService/KitchenResponsibleService.csproj"
+                "${workspaceRoot}/src/KitchenResponsibleService/KitchenResponsibleService.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
-        },
-        {
-          "taskName": "test",
-          "args": [ ],
-          "isTestCommand": true,
-          "showOutput": "always",
-          "problemMatcher": "$msCompile"
         }
     ]
 }

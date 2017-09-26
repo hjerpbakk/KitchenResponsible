@@ -1,9 +1,9 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleService", "KitchenResponsibleService\KitchenResponsibleService.csproj", "{8A600012-FBB0-4E67-84C5-F0EA2644A13C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleService", "src\KitchenResponsibleService\KitchenResponsibleService.csproj", "{8A600012-FBB0-4E67-84C5-F0EA2644A13C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleServiceTests", "KitchenResponsibleServiceTests\KitchenResponsibleServiceTests.csproj", "{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitchenResponsibleServiceTests", "src\KitchenResponsibleServiceTests\KitchenResponsibleServiceTests.csproj", "{D6623EDB-88FF-4D95-82B8-CABD26CE57BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
