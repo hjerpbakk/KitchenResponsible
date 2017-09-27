@@ -32,7 +32,7 @@ namespace KitchenResponsibleServiceTests.Services
             var storageFake = new Mock<IStorage>();
             storageFake.Setup(s => s.GetEmployees()).ReturnsAsync(() => employees.ToArray());
             storageFake.Setup(s => s.GetWeeksAndResponsibles()).ReturnsAsync(initialWeeksAndResponsibles);
-            storageFake.Setup(s => s.AddNewEmployee("Annette")).Returns(Task.CompletedTask).Callback(() => { employees.Add("Annette"); });
+            storageFake.Setup(s => s.AddNewEmployee(NewEmployee, "Annette LL")).Returns(Task.CompletedTask).Callback(() => { employees.Add("Annette"); });
             Action<List<ResponsibleForWeek>> verifySave = (weeksAndResponsibles) =>
             {
                 Assert.Equal(expectedWeeksAndResponsibles, weeksAndResponsibles);
@@ -41,7 +41,7 @@ namespace KitchenResponsibleServiceTests.Services
 
             var kitchenService = new KitchenService(storageFake.Object);
 
-            await kitchenService.AddNewEmployee(NewEmployee);
+            await kitchenService.AddNewEmployee(NewEmployee, "Annette LL");
 
             storageFake.Verify(s => s.Save(It.IsAny<List<ResponsibleForWeek>>()), Times.Once());
         }

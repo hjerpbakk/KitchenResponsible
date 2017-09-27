@@ -13,7 +13,10 @@ namespace KitchenResponsibleService.Db
 {
     public class BlobStorage : IStorage
     {
+        const string EmployeeExtension = ".txt";
         const string ResponsiblesId = "responsibles.txt";
+
+        readonly char[] employeeExtension;
 
         readonly CloudBlobClient blobClient;
 
@@ -22,6 +25,8 @@ namespace KitchenResponsibleService.Db
 
         public BlobStorage(BlobStorageConfiguration configuration)
         {
+            employeeExtension = EmployeeExtension.ToCharArray();
+
             var storageAccount = CloudStorageAccount.Parse(configuration.ConnectionString);
 
             blobClient = storageAccount.CreateCloudBlobClient();
@@ -57,18 +62,21 @@ namespace KitchenResponsibleService.Db
             var employees = new List<string>();
             foreach (var blob in blobs.Results.Cast<CloudBlockBlob>())
             {
-				using (var memoryStream = new MemoryStream())
-				{
-					await blob.DownloadToStreamAsync(memoryStream);
-					var employee = Encoding.UTF8.GetString(memoryStream.ToArray());
-					employees.Add(employee);
-				}
+                // TODO: Hent fult navn ved behov
+                //using (var memoryStream = new MemoryStream())
+                //{
+                //	await blob.DownloadToStreamAsync(memoryStream);
+                //	var employee = Encoding.UTF8.GetString(memoryStream.ToArray());
+                //	employees.Add(employee);
+                //}
+                var employee = blob.Name.TrimEnd(employeeExtension);
+                employees.Add(employee);
             }
 
             return employees.ToArray();
         }
 
-        public async Task AddNewEmployee(string employeeId) {
+        public async Task AddNewEmployee(string employeeId, string fullName) {
 			var token = new BlobContinuationToken();
             var blobs = await employeesContainer.ListBlobsSegmentedAsync(token);
             var uploadNewEmployee = true;
@@ -81,9 +89,14 @@ namespace KitchenResponsibleService.Db
             }
 
             if (uploadNewEmployee) {
-				var blobRef = employeesContainer.GetBlockBlobReference(employeeId + ".txt");
+				var blobRef = employeesContainer.GetBlockBlobReference(employeeId + EmployeeExtension);
 				await blobRef.UploadTextAsync(employeeId);    
             }
+        }
+
+        public async Task RemoveEmployee(string employeeId) {
+            var blobRef = employeesContainer.GetBlockBlobReference(employeeId + EmployeeExtension);
+            await blobRef.DeleteIfExistsAsync();
         }
     }
 }

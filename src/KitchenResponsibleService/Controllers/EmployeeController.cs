@@ -18,11 +18,15 @@ namespace KitchenResponsibleService.Controllers
         // POST api/employee
         [HttpPost]
         public async Task Post([FromBody]string employeeId) =>
-            await kitchenService.AddNewEmployee(employeeId);
+            await kitchenService.AddNewEmployee(employeeId, employeeId);
 
 		// GET api/employee/5
 		[HttpGet("{employeeId}")]
 		public async Task<ResponsibleForWeek> Get(string employeeId) =>
 			await kitchenService.GetWeekAndResponsibleForEmployee(employeeId);
+
+        [HttpDelete("{employeeId}")]
+		public async Task Delete(string employeeId) =>
+			await kitchenService.RemoveEmployee(employeeId);
     }
 }

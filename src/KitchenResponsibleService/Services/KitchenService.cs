@@ -17,12 +17,17 @@ namespace KitchenResponsibleService.Services
             this.blobStorage = blobStorage;
         }
 
-        public async Task AddNewEmployee(string employeeId) {
+        public async Task AddNewEmployee(string employeeId, string fullName) {
             if (employeeId == null) {
                 throw new ArgumentNullException(nameof(employeeId));
             }
 
-            await blobStorage.AddNewEmployee(employeeId);
+			if (fullName == null)
+			{
+				throw new ArgumentNullException(nameof(fullName));
+			}
+
+            await blobStorage.AddNewEmployee(employeeId, fullName);
             await RemoveOldWeeksAndFillWithFreeEmployees();
 		}
 
@@ -61,6 +66,9 @@ namespace KitchenResponsibleService.Services
 
         public async Task<ResponsibleForWeek> GetWeekAndResponsibleForCurrentWeek() =>
             await GetWeekAndResponsibleForWeek(GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow));
+
+        public async Task RemoveEmployee(string employeeId) =>
+            await blobStorage.RemoveEmployee(employeeId);
 
         async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
