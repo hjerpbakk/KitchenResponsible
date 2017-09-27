@@ -22,6 +22,7 @@ namespace KitchenResponsibleService
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .Build();
+				.UseContentRoot(Directory.GetCurrentDirectory())
+				.Build();
     }
 }

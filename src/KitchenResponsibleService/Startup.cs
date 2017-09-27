@@ -44,6 +44,7 @@ namespace KitchenResponsibleService
             }
 
             app.UseMvc();
+            app.UseStaticFiles();
         }
 
 		static BlobStorageConfiguration ReadBlobStorageConfig()

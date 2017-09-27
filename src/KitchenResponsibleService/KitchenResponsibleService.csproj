@@ -9,6 +9,10 @@
     <Folder Include="Configuration\" />
     <Folder Include="Db\" />
     <Folder Include="Services\" />
+    <Folder Include="Views\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
   <ItemGroup>

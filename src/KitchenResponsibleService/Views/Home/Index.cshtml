@@ -1,0 +1,31 @@
+﻿@using KitchenResponsibleService.Model;
+<html>
+    <head>
+        <link rel="stylesheet" type ="text/css" href ="css/dips.css" media ="screen" />
+    </head>
+    <body>
+        <h1>
+            Kjøkkenansvarlig <img src="images/logo.png" align="right" height="75">
+        </h1>
+		<h2>Sette på og tømme oppvaskmaskin</h2>
+        <h2>Tørke over benkplate</h2>
+        <h2>Rydde møterommene for kopper og kar som er gjenglemt</h2>
+		<h2>Gå gjennom kjøleskapet og kaste det som er gått ut på dato</h2>
+		<h2>Sjekke kaffebeholdning og si fra til Andreas om vi trenger mer</h2>      
+		<h2>Gå ned med søpla (be om hjelp om nødvendig)</h2>
+		<h2>Sjekk om vi må pante flasker og pant om nødvendig</h2>
+        <table style = "width:100%">
+			<tr>
+                <th align="right" style="width: 80px">Uke</th>
+				<th align="left">Ansvarlig</th>
+			</tr>
+            @foreach(var weekAndResponsible in (IEnumerable<ResponsibleForWeek>)ViewData["WeeksAndResponsibles"])
+            {
+			    <tr>
+				    <td align="right" style="width: 80px">@weekAndResponsible.WeekNumber</td>
+                    <td>@weekAndResponsible.SlackUser</td>    
+				</tr>
+            }
+        </table>
+    </body>
+</html>
