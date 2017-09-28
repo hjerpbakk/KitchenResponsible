@@ -67,9 +67,11 @@ namespace KitchenResponsibleService.Services
         public async Task<ResponsibleForWeek> GetWeekAndResponsibleForCurrentWeek() =>
             await GetWeekAndResponsibleForWeek(GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow));
 
-        public async Task RemoveEmployee(string employeeId) =>
+        public async Task RemoveEmployee(string employeeId) {
+            // TODO: Fjern bruker fra listen og etterfyll ukene dersom det blir hull
             await blobStorage.RemoveEmployee(employeeId);
-
+        }
+            
         async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
             RemoveOldWeeks(weeksWithResponisbles);
