@@ -31,8 +31,8 @@ namespace KitchenResponsibleService.Services
             await RemoveOldWeeksAndFillWithFreeEmployees();
 		}
 
-        public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles() =>
-            await RemoveOldWeeksAndFillWithFreeEmployees(); 
+        public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles(bool detailed = false) =>
+            await RemoveOldWeeksAndFillWithFreeEmployees(detailed); 
 
         public async Task<ResponsibleForWeek> GetWeekAndResponsibleForEmployee(string employeeId) {
 			if (employeeId == null)
@@ -72,7 +72,7 @@ namespace KitchenResponsibleService.Services
             await blobStorage.RemoveEmployee(employeeId);
         }
             
-        async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
+        async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees(bool detailed = false) {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
             RemoveOldWeeks(weeksWithResponisbles);
             await GiveWeeksToFreeEmployees(weeksWithResponisbles);
