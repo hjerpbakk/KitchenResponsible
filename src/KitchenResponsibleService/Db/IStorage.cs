@@ -7,9 +7,9 @@ namespace KitchenResponsibleService.Db
 {
     public interface IStorage
     {
-        Task AddNewEmployee(string employeeId, string fullName);
+        Task AddNewEmployee(Employee employee);
         Task RemoveEmployee(string employeeId);
-        Task<string[]> GetEmployees();
+        Task<Employee[]> GetEmployees();
         Task<List<ResponsibleForWeek>> GetWeeksAndResponsibles();
         Task Save(List<ResponsibleForWeek> weeksAndResponsibles);
     }

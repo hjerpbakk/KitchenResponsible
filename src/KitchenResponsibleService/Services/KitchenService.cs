@@ -17,22 +17,22 @@ namespace KitchenResponsibleService.Services
             this.blobStorage = blobStorage;
         }
 
-        public async Task AddNewEmployee(string employeeId, string fullName) {
-            if (employeeId == null) {
-                throw new ArgumentNullException(nameof(employeeId));
+        public async Task AddNewEmployee(Employee employee) {
+            if (employee.SlackUserId == null) {
+                throw new ArgumentNullException(nameof(employee.SlackUserId));
             }
 
-			if (fullName == null)
+			if (employee.Name == null)
 			{
-				throw new ArgumentNullException(nameof(fullName));
+				throw new ArgumentNullException(nameof(employee.Name ));
 			}
 
-            await blobStorage.AddNewEmployee(employeeId, fullName);
+            await blobStorage.AddNewEmployee(employee);
             await RemoveOldWeeksAndFillWithFreeEmployees();
 		}
 
-        public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles(bool detailed = false) =>
-            await RemoveOldWeeksAndFillWithFreeEmployees(detailed); 
+        public async Task<IEnumerable<ResponsibleForWeek>> GetWeeksAndResponsibles() =>
+            await RemoveOldWeeksAndFillWithFreeEmployees(); 
 
         public async Task<ResponsibleForWeek> GetWeekAndResponsibleForEmployee(string employeeId) {
 			if (employeeId == null)
@@ -43,7 +43,7 @@ namespace KitchenResponsibleService.Services
             var weeksWithResponisbles = await RemoveOldWeeksAndFillWithFreeEmployees();
             var weekForUser = weeksWithResponisbles.SingleOrDefault(w => w.SlackUser == employeeId);
             if (weekForUser.SlackUser == null) {
-                return new ResponsibleForWeek(0, employeeId);
+                return new ResponsibleForWeek(0, new Employee(employeeId, weekForUser.Name));
             }
 
             return weekForUser;
@@ -58,7 +58,7 @@ namespace KitchenResponsibleService.Services
             var weekForUser = weeksWithResponisbles.SingleOrDefault(w => w.WeekNumber == weekNumber);
 			if (weekForUser.SlackUser == null)
 			{
-				return new ResponsibleForWeek(weekNumber, null);
+				return new ResponsibleForWeek(weekNumber, new Employee());
 			}
 
 			return weekForUser;
@@ -72,7 +72,7 @@ namespace KitchenResponsibleService.Services
             await blobStorage.RemoveEmployee(employeeId);
         }
             
-        async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees(bool detailed = false) {
+        async Task<List<ResponsibleForWeek>> RemoveOldWeeksAndFillWithFreeEmployees() {
 			var weeksWithResponisbles = await blobStorage.GetWeeksAndResponsibles();
             RemoveOldWeeks(weeksWithResponisbles);
             await GiveWeeksToFreeEmployees(weeksWithResponisbles);
@@ -100,7 +100,7 @@ namespace KitchenResponsibleService.Services
 
             foreach (var employee in employees)
             {
-                if (weeksAndResponsibles.FindIndex(w => w.SlackUser == employee) == -1) {
+                if (weeksAndResponsibles.FindIndex(w => w.SlackUser == employee.SlackUserId) == -1) {
                     week = GetNextWeek(week);
                     weeksAndResponsibles.Add(new ResponsibleForWeek(week, employee));
                 }

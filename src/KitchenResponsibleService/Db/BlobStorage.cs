@@ -56,41 +56,41 @@ namespace KitchenResponsibleService.Db
 			await blobRef.UploadTextAsync(weeksAndResponsiblesString);
 		}
 
-        public async Task<string[]> GetEmployees() {
+        public async Task<Employee[]> GetEmployees() {
 			var token = new BlobContinuationToken();
 			var blobs = await employeesContainer.ListBlobsSegmentedAsync(token);
-            var employees = new List<string>();
+            var employees = new List<Employee>();
             foreach (var blob in blobs.Results.Cast<CloudBlockBlob>())
             {
-                // TODO: Hent fult navn ved behov
-                //using (var memoryStream = new MemoryStream())
-                //{
-                //	await blob.DownloadToStreamAsync(memoryStream);
-                //	var employee = Encoding.UTF8.GetString(memoryStream.ToArray());
-                //	employees.Add(employee);
-                //}
-                var employee = blob.Name.TrimEnd(employeeExtension);
-                employees.Add(employee);
+                var slackUserId = blob.Name.TrimEnd(employeeExtension);
+                var name = "";
+                using (var memoryStream = new MemoryStream())
+                {
+                	await blob.DownloadToStreamAsync(memoryStream);
+                	name = Encoding.UTF8.GetString(memoryStream.ToArray());
+                }
+                
+                employees.Add(new Employee(slackUserId, name));
             }
 
             return employees.ToArray();
         }
 
-        public async Task AddNewEmployee(string employeeId, string fullName) {
+        public async Task AddNewEmployee(Employee employee) {
 			var token = new BlobContinuationToken();
             var blobs = await employeesContainer.ListBlobsSegmentedAsync(token);
             var uploadNewEmployee = true;
             foreach (var blob in blobs.Results.Cast<CloudBlockBlob>())
             {
-                if (blob.Name.StartsWith(employeeId, StringComparison.Ordinal)) {
+                if (blob.Name.StartsWith(employee.SlackUserId, StringComparison.Ordinal)) {
                     uploadNewEmployee = false;
                     break;
                 }
             }
 
             if (uploadNewEmployee) {
-				var blobRef = employeesContainer.GetBlockBlobReference(employeeId + EmployeeExtension);
-				await blobRef.UploadTextAsync(employeeId);    
+				var blobRef = employeesContainer.GetBlockBlobReference(employee.SlackUserId + EmployeeExtension);
+				await blobRef.UploadTextAsync(employee.Name);    
             }
         }
 

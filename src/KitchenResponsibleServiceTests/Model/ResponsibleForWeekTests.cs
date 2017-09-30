@@ -8,14 +8,14 @@ namespace KitchenResponsibleServiceTests.Model
     {
         [Fact]
         public void Parse_StringToList() {
-            const string WeeksAndResponsibles = "37 U1TBU8336\n38 U1TBU8336\n39 U1TBU8336\n40 U1TBU8336\n41 U1TBU8336\n42 U1TBU8336";
+            const string WeeksAndResponsibles = "37;U1TBU8336;Runar Ovesen Hjerpbakk\n38;U1TBU8336;Runar Ovesen Hjerpbakk\n39;U1TBU8336;Runar Ovesen Hjerpbakk\n40;U1TBU8336;Runar Ovesen Hjerpbakk\n41;U1TBU8336;Runar Ovesen Hjerpbakk\n42;U1TBU8336;Runar Ovesen Hjerpbakk";
 			var expectedWeeksAndResponsibles = new List<ResponsibleForWeek> {
-				new ResponsibleForWeek(37, "U1TBU8336"),
-				new ResponsibleForWeek(38, "U1TBU8336"),
-				new ResponsibleForWeek(39, "U1TBU8336"),
-                new ResponsibleForWeek(40, "U1TBU8336"),
-                new ResponsibleForWeek(41, "U1TBU8336"),
-                new ResponsibleForWeek(42, "U1TBU8336"),
+				Create(37),
+				Create(38),
+				Create(39),
+				Create(40),
+				Create(41),
+				Create(42)
 			};
 
             var actual = ResponsibleForWeek.Parse(WeeksAndResponsibles);
@@ -26,19 +26,21 @@ namespace KitchenResponsibleServiceTests.Model
 		[Fact]
 		public void Parse_ListToString()
 		{
-			const string ExpectedWeeksAndResponsibles = "37 U1TBU8336\n38 U1TBU8336\n39 U1TBU8336\n40 U1TBU8336\n41 U1TBU8336\n42 U1TBU8336";
+			const string WeeksAndResponsibles = "37;U1TBU8336;Runar Ovesen Hjerpbakk\n38;U1TBU8336;Runar Ovesen Hjerpbakk\n39;U1TBU8336;Runar Ovesen Hjerpbakk\n40;U1TBU8336;Runar Ovesen Hjerpbakk\n41;U1TBU8336;Runar Ovesen Hjerpbakk\n42;U1TBU8336;Runar Ovesen Hjerpbakk";
 			var weeksAndResponsibles = new List<ResponsibleForWeek> {
-				new ResponsibleForWeek(37, "U1TBU8336"),
-				new ResponsibleForWeek(38, "U1TBU8336"),
-				new ResponsibleForWeek(39, "U1TBU8336"),
-				new ResponsibleForWeek(40, "U1TBU8336"),
-				new ResponsibleForWeek(41, "U1TBU8336"),
-				new ResponsibleForWeek(42, "U1TBU8336"),
+				Create(37),
+				Create(38),
+				Create(39),
+				Create(40),
+				Create(41),
+				Create(42)
 			};
 
 			var actual = ResponsibleForWeek.Parse(weeksAndResponsibles);
 
-			Assert.Equal(ExpectedWeeksAndResponsibles, actual);
+			Assert.Equal(WeeksAndResponsibles, actual);
 		}
+
+		ResponsibleForWeek Create(ushort week) => new ResponsibleForWeek(week, new Employee("U1TBU8336", "Runar Ovesen Hjerpbakk"));
     }
 }

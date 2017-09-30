@@ -20,7 +20,7 @@ namespace KitchenResponsibleService.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var weeksAndResponsibles = await kitchenService.GetWeeksAndResponsibles(true);
+            var weeksAndResponsibles = await kitchenService.GetWeeksAndResponsibles();
             ViewData["WeeksAndResponsibles"] = weeksAndResponsibles;
             return View();
         }
