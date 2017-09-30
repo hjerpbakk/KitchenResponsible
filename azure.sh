@@ -17,6 +17,6 @@ docker push dipsbot.azurecr.io/kitchen-responsible
 # az acr show --name dipsbot --query loginServer
 # az acr credential show --name dipsbot --query "passwords[0].value"
 az container delete --name kitchen-responsible-service --resource-group kitchen-responsible-rg --yes
-az container create --name kitchen-responsible-service --image dipsbot.azurecr.io/kitchen-responsible --cpu 1 --memory 1 --registry-password [PASSWORD] --ip-address public -g kitchen-responsible-rg
+az container create --name kitchen-responsible-service --image dipsbot.azurecr.io/kitchen-responsible --cpu 1 --memory 1 --registry-password $AZUREPW --ip-address public -g kitchen-responsible-rg
 # az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query state
 az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query ipAddress.ip
