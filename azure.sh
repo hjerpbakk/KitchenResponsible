@@ -19,11 +19,18 @@ docker push dipsbot.azurecr.io/kitchen-responsible
 # az acr credential show --name dipsbot --query "passwords[0].value"
 az container delete --name kitchen-responsible-service --resource-group kitchen-responsible-rg --yes
 az container create --name kitchen-responsible-service --image dipsbot.azurecr.io/kitchen-responsible --cpu 1 --memory 1 --registry-password $AZUREPW --ip-address public -g kitchen-responsible-rg
-# az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query state
 
-# TODO: Wait for container running
+container_status=$(az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query state)
+echo $container_status
+while [ $container_status != "\"Running\"" ]
+do 
+    sleep 5
+    container_status=$(az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query state)
+    echo $container_status
+done
 
 # Uploud IP to Blob Storage
 touch ./kitchen-service.txt
+# Needs. AZURE_STORAGE_CONNECTION_STRING environment variable
 az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query ipAddress.ip > ./kitchen-service.txt
 az storage blob upload --container-name discovery --file kitchen-service.txt --name kitchen-service.txt
