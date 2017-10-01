@@ -21,9 +21,9 @@ az container delete --name kitchen-responsible-service --resource-group kitchen-
 az container create --name kitchen-responsible-service --image dipsbot.azurecr.io/kitchen-responsible --cpu 1 --memory 1 --registry-password $AZUREPW --ip-address public -g kitchen-responsible-rg
 # az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query state
 
-# Uploud IP to Blob Storage
-export AZURE_STORAGE_CONNECTION_STRING="DefaultEndpointsProtocol=https;AccountName=profilebotdb;AccountKey=1uxAxg1Ms6AlYC6gWfP3reJER0+xjLzQQToaxhhaI/rsJLBwEEuTJA8vxDCBWEJJ+LFK6Qx4WaI2oRtEoJeRiQ==;EndpointSuffix=core.windows.net"
+# TODO: Wait for container running
 
+# Uploud IP to Blob Storage
 touch ./kitchen-service.txt
 az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query ipAddress.ip > ./kitchen-service.txt
 az storage blob upload --container-name discovery --file kitchen-service.txt --name kitchen-service.txt
