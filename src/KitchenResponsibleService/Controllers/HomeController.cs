@@ -33,7 +33,7 @@ namespace KitchenResponsibleService.Controllers
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.
-                    .SetSlidingExpiration(TimeSpan.FromHours(1));
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(59));
 
                 // Save data in cache.
                 memoryCache.Set(Keys.WeeksAndResponsibles, weeksAndResponsibles, cacheEntryOptions);
