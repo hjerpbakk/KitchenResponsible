@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Needs: brew install azure-cli
 # Push to Azure Container Registry

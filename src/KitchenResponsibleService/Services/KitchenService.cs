@@ -64,6 +64,7 @@ namespace KitchenResponsibleService.Services
 			return weekForUser;
         }
 
+         // TODO: What about different timezones? Now the server is king, but actually Trondheim office is king
         public async Task<ResponsibleForWeek> GetWeekAndResponsibleForCurrentWeek() =>
             await GetWeekAndResponsibleForWeek(GetIso8601WeekOfYear(ConfigurableDateTime.UtcNow));
 
