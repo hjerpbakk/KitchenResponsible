@@ -33,4 +33,5 @@ done
 touch ./kitchen-service.txt
 # Needs. AZURE_STORAGE_CONNECTION_STRING environment variable
 az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query ipAddress.ip > ./kitchen-service.txt
+cat ./kitchen-service.txt
 az storage blob upload --container-name discovery --file kitchen-service.txt --name kitchen-service.txt
