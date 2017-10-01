@@ -20,6 +20,9 @@ namespace KitchenResponsibleService
     {
         public Startup(IConfiguration configuration)
         {
+            // TODO: Add end-to-end tests like: https://github.com/seesharper/Blog.AspNetCoreUnitTesting
+            // TODO: Add metrics https://github.com/Recognos/Metrics.NET
+            // TODO: Add dashboard https://github.com/grafana/grafana
             Configuration = configuration;
         }
 
