@@ -1,6 +1,6 @@
 #!/bin/bash
-set -e
 rm -r ./publish
+set -e
 dotnet restore
 dotnet build
 dotnet test src/KitchenResponsibleServiceTests/KitchenResponsibleServiceTests.csproj --no-build --no-restore
