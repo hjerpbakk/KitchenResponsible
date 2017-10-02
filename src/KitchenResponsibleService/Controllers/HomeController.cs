@@ -40,6 +40,11 @@ namespace KitchenResponsibleService.Controllers
             }
 
             ViewData["WeeksAndResponsibles"] = weeksAndResponsibles;
+
+            // TODO: Show comics at the bottom
+            // Old site: http://vd-trondheim01/lunch.html
+            // TODO: iPad app to enable proper fullscreen and service discovery
+
             return View();
         }
     }
