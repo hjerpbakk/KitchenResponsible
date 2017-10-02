@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using KitchenResponsibleService.Configuration;
 using KitchenResponsibleService.Db;
 using KitchenResponsibleService.Services;
+using KitchenResponsibleService.Clients;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,8 +37,14 @@ namespace KitchenResponsibleService
             services.AddMvc();
 
             services.AddSingleton(ReadBlobStorageConfig());
+            var configuration = new AppConfiguration();
+            services.AddSingleton<IReadOnlyAppConfiguration>(configuration);
+            services.AddSingleton(configuration);
             services.AddSingleton<IStorage, BlobStorage>();
+            services.AddSingleton<ServiceDiscoveryClient>();
             services.AddSingleton<KitchenService>();
+            services.AddSingleton<HttpClient>();
+            services.AddSingleton<ComicsClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

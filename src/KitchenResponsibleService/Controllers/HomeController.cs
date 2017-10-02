@@ -6,6 +6,7 @@ using KitchenResponsibleService.Services;
 using KitchenResponsibleService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using KitchenResponsibleService.Clients;
 
 namespace KitchenResponsibleService.Controllers
 {
@@ -14,15 +15,18 @@ namespace KitchenResponsibleService.Controllers
     {
 		readonly KitchenService kitchenService;
         readonly IMemoryCache memoryCache;
+        readonly ComicsClient comicsClient;
 
-		public HomeController(KitchenService kitchenService, IMemoryCache memoryCache)
+		public HomeController(KitchenService kitchenService, IMemoryCache memoryCache, ComicsClient comicsClient)
 		{
 			this.kitchenService = kitchenService;
             this.memoryCache = memoryCache;
+            this.comicsClient = comicsClient;
 		}
 
         public async Task<IActionResult> Index()
         {
+            // TODO: Cache entire view instead
             IEnumerable<ResponsibleForWeek> weeksAndResponsibles;
             // Look for cache key.
             if (!memoryCache.TryGetValue(Keys.WeeksAndResponsibles, out weeksAndResponsibles))
@@ -32,17 +36,15 @@ namespace KitchenResponsibleService.Controllers
 
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    // Keep in cache for this time, reset time if accessed.
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(59));
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(59));
 
                 // Save data in cache.
                 memoryCache.Set(Keys.WeeksAndResponsibles, weeksAndResponsibles, cacheEntryOptions);
             }
 
-            ViewData["WeeksAndResponsibles"] = weeksAndResponsibles;
+            ViewData["WeeksAndResponsibles"] = weeksAndResponsibles.Take(5);
+            ViewData["LatestComic"] = await comicsClient.GetLatestComicsAsync();
 
-            // TODO: Show comics at the bottom
-            // Old site: http://vd-trondheim01/lunch.html
             // TODO: iPad app to enable proper fullscreen and service discovery
 
             return View();
