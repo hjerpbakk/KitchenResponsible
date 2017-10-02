@@ -36,15 +36,21 @@ namespace KitchenResponsibleService
             services.AddMemoryCache();
             services.AddMvc();
 
-            services.AddSingleton(ReadBlobStorageConfig());
+            var blobStorageConfiguration = ReadBlobStorageConfig();
             var configuration = new AppConfiguration();
+            var serviceDiscoveryClient = new ServiceDiscoveryClient(blobStorageConfiguration, configuration);
+            serviceDiscoveryClient.SetComicServiceURL().GetAwaiter();
+
             services.AddSingleton<IReadOnlyAppConfiguration>(configuration);
             services.AddSingleton(configuration);
+            services.AddSingleton(blobStorageConfiguration);
             services.AddSingleton<IStorage, BlobStorage>();
-            services.AddSingleton<ServiceDiscoveryClient>();
+            services.AddSingleton(serviceDiscoveryClient);
             services.AddSingleton<KitchenService>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<ComicsClient>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
