@@ -3,30 +3,30 @@ body{
 }
 
 h1 {
-	font-family: 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
-	font-size: 6vw;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 500;
-	line-height: 4vw;
-	padding: 1vw 1vw 0vw 1vw;
+    font-family: 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 6vw;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 500;
+    margin: 1vw;
 }
 
 h2 {
     font-family: 'Segoe UI', Frutiger, 'Frutiger Linotype', 'Dejavu Sans', 'Helvetica Neue', Arial, sans-serif;
     font-size: 2vw;
-    padding-left: 1vw;
+    margin: 1vw;
 }
 
 table {
-	width: 100%;
-	font-family: 'Open Sans', Arial, sans-serif;
-	font-size: 2vw;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	line-height: 2vw;
-	border-collapse: collapse;
+    width: 100%;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 2vw;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 2vw;
+    border-collapse: collapse;
+    margin: 1vw;
 }
 
 th {
@@ -53,5 +53,4 @@ tr:nth-child(even) {
 	background: #22313F;
 	color: #f5f5f5;
 	font-size: 2.5vw;
-	padding: 1.2vw;
 }

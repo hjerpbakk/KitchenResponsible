@@ -20,19 +20,20 @@ namespace KitchenResponsibleService.Clients
             this.readOnlyAppConfiguration = readOnlyAppConfiguration;
         }
         
-        public async Task<string> GetLatestComicsAsync() {
+        public async Task<string> GetLatestComicAsync() {
             // TODO: Change when BlobStorage supports push
             try
             {
-                return await GetLatestComicAsync();
+                // TODO: Need to fail faster when ip is wrong
+                return await GetLatestComicsAsync();
             }
             catch (Exception)
             {
                 await serviceDiscoveryClient.SetComicServiceURL();
-                return await GetLatestComicAsync();
+                return await GetLatestComicsAsync();
             }
         }
 
-        async Task<string> GetLatestComicAsync() => await httpClient.GetStringAsync(ServiceURL + "comics");
+        async Task<string> GetLatestComicsAsync() => await httpClient.GetStringAsync(ServiceURL + "comics");
     }
 }

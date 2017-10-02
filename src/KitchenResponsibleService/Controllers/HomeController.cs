@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KitchenResponsibleService.Clients;
 using KitchenResponsibleService.Services;
-using KitchenResponsibleService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using KitchenResponsibleService.Clients;
 
 namespace KitchenResponsibleService.Controllers
 {
@@ -26,28 +24,24 @@ namespace KitchenResponsibleService.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // TODO: Cache entire view instead
-            IEnumerable<ResponsibleForWeek> weeksAndResponsibles;
-            // Look for cache key.
-            if (!memoryCache.TryGetValue(Keys.WeeksAndResponsibles, out weeksAndResponsibles))
+            if (!memoryCache.TryGetValue(Keys.KitchenResponsibleWebsite, out ViewResult view))
             {
-                // Key not in cache, so get data.
-                weeksAndResponsibles = await kitchenService.GetWeeksAndResponsibles();
+                var weeksAndResponsiblesTask = kitchenService.GetWeeksAndResponsibles();
+                var getLatestComicTask = comicsClient.GetLatestComicAsync();
+                await Task.WhenAll(weeksAndResponsiblesTask, getLatestComicTask);
+                var weeksAndResponsibles = weeksAndResponsiblesTask.Result;
+                ViewData["WeeksAndResponsibles"] = weeksAndResponsibles.Take(5).ToList();
+                ViewData["LatestComic"] = getLatestComicTask.Result;
+                view = View();
 
-                // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(59));
 
-                // Save data in cache.
-                memoryCache.Set(Keys.WeeksAndResponsibles, weeksAndResponsibles, cacheEntryOptions);
+                memoryCache.Set(Keys.KitchenResponsibleWebsite, view, cacheEntryOptions);
             }
 
-            ViewData["WeeksAndResponsibles"] = weeksAndResponsibles.Take(5);
-            ViewData["LatestComic"] = await comicsClient.GetLatestComicsAsync();
-
             // TODO: iPad app to enable proper fullscreen and service discovery
-
-            return View();
+            return view;
         }
     }
 }

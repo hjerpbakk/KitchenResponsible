@@ -1,4 +1,5 @@
 ﻿@using KitchenResponsibleService.Model;
+@using System.Collections.Generic;
 <html>
     <head>
         <META HTTP-EQUIV="refresh" CONTENT="3600" />
@@ -20,14 +21,18 @@
                 <th align="right" style="width: 80px">Uke</th>
 				<th align="left">Ansvarlig</th>
 			</tr>
-            @foreach(var weekAndResponsible in (IEnumerable<ResponsibleForWeek>)ViewData["WeeksAndResponsibles"])
-            {
-			    <tr>
-				    <td align="right" style="width: 80px">@weekAndResponsible.WeekNumber</td>
-                    <td>@weekAndResponsible.Name</td>    
-				</tr>
-            }
+			@{var weeksAndResponsibles = (List<ResponsibleForWeek>)ViewData["WeeksAndResponsibles"];}
+			<tr id="selected">
+                <td align="right" style="width: 80px">@weeksAndResponsibles[0].WeekNumber</td>
+                <td>@weeksAndResponsibles[0].Name</td>    
+            </tr>
+			@for(var i = 1; i < weeksAndResponsibles.Count; ++i) {
+                <tr>
+                    <td align="right" style="width: 80px">@weeksAndResponsibles[i].WeekNumber</td>
+                    <td>@weeksAndResponsibles[i].Name</td>    
+                </tr>
+			}
         </table>
-		<img src="@ViewData["LatestComic"]" align="center" style="width:100%;padding-top: 1vw;"/>
+		<img src="@ViewData["LatestComic"]" align="center" style="width:100%;margin:1vw;"/>
     </body>
 </html>
