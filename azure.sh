@@ -33,5 +33,7 @@ done
 touch ./kitchen-service.txt
 # Needs. AZURE_STORAGE_CONNECTION_STRING environment variable
 az container show --name kitchen-responsible-service --resource-group kitchen-responsible-rg --query ipAddress.ip > ./kitchen-service.txt
-cat ./kitchen-service.txt
+ip=$(cat ./service-discovery-service.txt | tr -d '"')
 az storage blob upload --container-name discovery --file kitchen-service.txt --name kitchen-service.txt
+curl -X POST -H "Content-Type: application/json" -d "{\"name\":\"kitchen-service\", \"ip\":\"$ip\"}" -i http://who-am-i.xyz/api/services/
+cat ./kitchen-service.txt

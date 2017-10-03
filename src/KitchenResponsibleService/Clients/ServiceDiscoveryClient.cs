@@ -4,8 +4,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using KitchenResponsibleService.Configuration;
+using KitchenResponsibleService.Model;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Newtonsoft.Json;
 
 namespace KitchenResponsibleService.Clients
 {
@@ -26,7 +28,8 @@ namespace KitchenResponsibleService.Clients
         public async Task SetComicServiceURL(string ip = null) {
             string comicsURL;
             if (ip == null) {
-                comicsURL = await httpClient.GetStringAsync(configuration.ServiceDiscoveryURL + ComicService);
+                var service = await httpClient.GetStringAsync(configuration.ServiceDiscoveryURL + ComicService);
+                comicsURL = JsonConvert.DeserializeObject<Service>(service).IP;
             } else {
                 comicsURL = ip;
             }

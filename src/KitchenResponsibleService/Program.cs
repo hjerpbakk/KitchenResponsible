@@ -23,6 +23,7 @@ namespace KitchenResponsibleService
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
 				.UseContentRoot(Directory.GetCurrentDirectory())
+                .UseApplicationInsights()
 				.Build();
     }
 }
