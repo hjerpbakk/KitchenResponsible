@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using KitchenResponsibleService.Configuration;
@@ -10,39 +11,27 @@ namespace KitchenResponsibleService.Clients
 {
     public class ServiceDiscoveryClient
     {
-        const string ContainerName = "discovery";
-        const string ComicsServiceURLBlobName = "comics-service.txt";
+        public const string ComicService = "comics-service";
 
         readonly AppConfiguration configuration;
+        readonly HttpClient httpClient;
 
-        readonly CloudBlobClient blobClient;
-        readonly CloudBlobContainer discoveryContainer;
-
-        public ServiceDiscoveryClient(BlobStorageConfiguration blobStorageConfiguration, AppConfiguration configuration)
+        public ServiceDiscoveryClient(HttpClient httpClient, AppConfiguration configuration)
 		{
+            this.httpClient = httpClient;
             this.configuration = configuration;
-			var storageAccount = CloudStorageAccount.Parse(blobStorageConfiguration.ConnectionString);
-
-			blobClient = storageAccount.CreateCloudBlobClient();
-
-			discoveryContainer = blobClient.GetContainerReference(ContainerName);
-			discoveryContainer.CreateIfNotExistsAsync().GetAwaiter();
+            configuration.ServiceDiscoveryURL = "http://"  + configuration.ServiceDiscoveryURL + "/api/services/";
         }
 
-        public async Task SetComicServiceURL() {
-            var blobRef = discoveryContainer.GetBlobReference(ComicsServiceURLBlobName);
-            string ip = null;
-            using (var memoryStream = new MemoryStream())
-    	    {
-    	       await blobRef.DownloadToStreamAsync(memoryStream);
-    	       ip = Encoding.UTF8.GetString(memoryStream.ToArray());
-    	    }
-
+        public async Task SetComicServiceURL(string ip = null) {
+            string comicsURL;
             if (ip == null) {
-                throw new ArgumentException($"Could not find Comics Service IP in container {ContainerName} with blob name {ComicsServiceURLBlobName}");
+                comicsURL = await httpClient.GetStringAsync(configuration.ServiceDiscoveryURL + ComicService);
+            } else {
+                comicsURL = ip;
             }
-
-			configuration.ComicsServiceURL = "http://" + ip.Trim('"', '\n') + "/";
+            
+			configuration.ComicsServiceURL =  "http://" + comicsURL + "/api/";;
         }
     }
 }

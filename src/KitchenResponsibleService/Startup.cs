@@ -36,18 +36,16 @@ namespace KitchenResponsibleService
             services.AddMemoryCache();
             services.AddMvc();
 
-            var blobStorageConfiguration = ReadBlobStorageConfig();
-            var configuration = new AppConfiguration();
-            var serviceDiscoveryClient = new ServiceDiscoveryClient(blobStorageConfiguration, configuration);
+            var configuration = ReadConfig();
+            var httpClient = new HttpClient();
+            var serviceDiscoveryClient = new ServiceDiscoveryClient(httpClient, configuration);
             serviceDiscoveryClient.SetComicServiceURL().GetAwaiter();
 
             services.AddSingleton<IReadOnlyAppConfiguration>(configuration);
-            services.AddSingleton(configuration);
-            services.AddSingleton(blobStorageConfiguration);
             services.AddSingleton<IStorage, BlobStorage>();
             services.AddSingleton(serviceDiscoveryClient);
             services.AddSingleton<KitchenService>();
-            services.AddSingleton<HttpClient>();
+            services.AddSingleton(httpClient);
             services.AddSingleton<ComicsClient>();
 
 
@@ -65,9 +63,9 @@ namespace KitchenResponsibleService
             app.UseStaticFiles();
         }
 
-		static BlobStorageConfiguration ReadBlobStorageConfig()
+		static AppConfiguration ReadConfig()
 		{
-			return JsonConvert.DeserializeObject<BlobStorageConfiguration>(File.ReadAllText("config.json"));
+			return JsonConvert.DeserializeObject<AppConfiguration>(File.ReadAllText("config.json"));
 		}
     }
 }

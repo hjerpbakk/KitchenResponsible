@@ -23,7 +23,7 @@ namespace KitchenResponsibleService.Db
         readonly CloudBlobContainer kitchenContainer;
         readonly CloudBlobContainer employeesContainer;
 
-        public BlobStorage(BlobStorageConfiguration configuration)
+        public BlobStorage(IReadOnlyAppConfiguration configuration)
         {
             employeeExtension = EmployeeExtension.ToCharArray();
 
