@@ -40,6 +40,7 @@ namespace KitchenResponsibleService.Controllers
                 memoryCache.Set(Keys.KitchenResponsibleWebsite, view, cacheEntryOptions);
             }
 
+            // TODO: Show/Hide button is ridiculously ugly, half transparent last row or something must be better
             // TODO: iPad app to enable proper fullscreen and service discovery
             return view;
         }
