@@ -25,7 +25,7 @@ namespace KitchenResponsibleService.Controllers
                 return $"Only interested in {ServiceDiscoveryClient.ComicService}";
             }
 
-            await serviceDiscoveryClient.SetComicServiceURL(service.Name);
+            await serviceDiscoveryClient.SetComicServiceURL(service.IP);
             return $"Changed {service.Name} IP to {service.IP}";
         }
     }
