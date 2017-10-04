@@ -19,13 +19,14 @@ namespace KitchenResponsibleService.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromBody]Service service)
+        public async Task<string> Post([FromBody]Service service)
         {
             if (service.Name != ServiceDiscoveryClient.ComicService) {
-                return;
+                return $"Only interested in {ServiceDiscoveryClient.ComicService}";
             }
 
             await serviceDiscoveryClient.SetComicServiceURL(service.Name);
+            return $"Changed {service.Name} IP to {service.IP}";
         }
     }
 }
