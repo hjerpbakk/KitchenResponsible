@@ -30,7 +30,7 @@ namespace KitchenResponsibleService.Controllers
                 var getLatestComicTask = comicsClient.GetLatestComicAsync();
                 await Task.WhenAll(weeksAndResponsiblesTask, getLatestComicTask);
                 var weeksAndResponsibles = weeksAndResponsiblesTask.Result;
-                ViewData["WeeksAndResponsibles"] = weeksAndResponsibles.Take(5).ToList();
+                ViewData["WeeksAndResponsibles"] = weeksAndResponsibles.ToList();
                 ViewData["LatestComic"] = getLatestComicTask.Result;
                 view = View();
 

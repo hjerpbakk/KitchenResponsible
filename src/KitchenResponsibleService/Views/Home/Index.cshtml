@@ -4,18 +4,10 @@
     <head>
         <META HTTP-EQUIV="refresh" CONTENT="3600" />
         <link rel="stylesheet" type ="text/css" href ="css/dips.css" media ="screen" />
-		<script type="text/javascript">
-          var appInsights=window.appInsights||function(config){
-            function i(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s="AuthenticatedUserContext",h="start",c="stop",l="Track",a=l+"Event",v=l+"Page",y=u.createElement(o),r,f;y.src=config.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js";u.getElementsByTagName(o)[0].parentNode.appendChild(y);try{t.cookie=u.cookie}catch(p){}for(t.queue=[],t.version="1.0",r=["Event","Exception","Metric","PageView","Trace","Dependency"];r.length;)i("track"+r.pop());return i("set"+s),i("clear"+s),i(h+a),i(c+a),i(h+v),i(c+v),i("flush"),config.disableExceptionTracking||(r="onerror",i("_"+r),f=e[r],e[r]=function(config,i,u,e,o){var s=f&&f(config,i,u,e,o);return s!==!0&&t["_"+r](config,i,u,e,o),s}),t
-            }({
-                instrumentationKey:"a378c5e6-0995-4fb6-b701-6eefd6ad6ff5"
-            });
-               
-            window.appInsights=appInsights;
-            appInsights.trackPageView();
-        </script>
+		<script type="text/javascript" src="js/application-insights.js"></script>
     </head>
     <body>
+		<!-- Kitchen Responsibles -->
         <h1>
             Kjøkkenansvarlig <img src="images/logo.png" align="right" height="75">
         </h1>
@@ -26,7 +18,7 @@
 		<h2>Sjekke kaffebeholdning og si fra til Andreas om vi trenger mer</h2>      
 		<h2>Gå ned med søpla (be om hjelp om nødvendig)</h2>
 		<h2>Sjekk om vi må pante flasker og pant om nødvendig</h2>
-        <table style="width:100%">
+        <table style="width:100%" id="internalActivities">
 			<tr>
                 <th align="right" style="width: 80px">Uke</th>
 				<th align="left">Ansvarlig</th>
@@ -43,6 +35,13 @@
                 </tr>
 			}
         </table>
+		<input type="button" id="seeMoreRecords" value="&#9660; Vis alle &#9660;" onclick="moreClick()">
+        <input type="button" id="seeLessRecords" value="&#9650; Vis de 5 neste &#9650;" onclick="lessClick()">
+
+		<!-- Comics -->
 		<img src="@ViewData["LatestComic"]" align="center" style="width:100%;margin:1vw;"/>
+
+        <!-- Show and hide rows -->
+		<script type="text/javascript" src="js/show-and-hide-rows.js"></script>
     </body>
 </html>
