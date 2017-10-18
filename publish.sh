@@ -1,3 +1,3 @@
 #!/bin/bash
 ./build.sh
-./azure.sh
+./azure-container-app-service.sh
