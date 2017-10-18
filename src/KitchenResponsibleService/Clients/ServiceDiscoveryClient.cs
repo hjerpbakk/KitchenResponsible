@@ -34,7 +34,7 @@ namespace KitchenResponsibleService.Clients
                 comicsURL = ip;
             }
             
-			configuration.ComicsServiceURL =  "http://" + comicsURL + "/api/";;
+			configuration.ComicsServiceURL =  "http://" + comicsURL + "/api/";
         }
     }
 }
