@@ -2,6 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationInsightsResourceId>/subscriptions/33ce3627-590f-4187-b3f9-5127ea1f6b5a/resourcegroups/dipsbot/providers/microsoft.insights/components/dips-trondheim-kitchen-responsible-service</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/33ce3627-590f-4187-b3f9-5127ea1f6b5a/resourcegroups/dipsbot/providers/microsoft.insights/components/dips-trondheim-kitchen-responsible-service</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -28,5 +30,8 @@
     <None Update="config.default.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 </Project>
