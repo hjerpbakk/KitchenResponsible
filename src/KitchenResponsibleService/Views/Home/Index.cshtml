@@ -7,7 +7,7 @@
 		<script type="text/javascript" src="js/application-insights.js"></script>
     </head>
     <body>
-		<!-- Kitchen Responsibles -->
+		<!-- Kitchen Guide -->
         <h1>
             Kjøkkenansvarlig <img src="images/logo.png" align="right" height="75">
         </h1>
@@ -18,29 +18,35 @@
 		<h2>Sjekke kaffebeholdning og si fra til Andreas om vi trenger mer</h2>      
 		<h2>Gå ned med søpla (be om hjelp om nødvendig)</h2>
 		<h2>Sjekk om vi må pante flasker og pant om nødvendig</h2>
-        <table style="width:100%" id="internalActivities">
-			<tr>
+		
+		<!-- Kitchen Responsibles -->
+	    @{var weeksAndResponsibles = (List<ResponsibleForWeek>)ViewData["WeeksAndResponsibles"];}
+        @if (weeksAndResponsibles != null) {
+            <table style="width:100%" id="internalActivities">
+            <tr>
                 <th align="right" style="width: 80px">Uke</th>
-				<th align="left">Ansvarlig</th>
-			</tr>
-			@{var weeksAndResponsibles = (List<ResponsibleForWeek>)ViewData["WeeksAndResponsibles"];}
-			<tr id="selected">
+                <th align="left">Ansvarlig</th>
+            </tr>         
+            <tr id="selected">
                 <td align="right" style="width: 80px">@weeksAndResponsibles[0].WeekNumber</td>
                 <td>@weeksAndResponsibles[0].Name</td>    
             </tr>
-			@for(var i = 1; i < weeksAndResponsibles.Count; ++i) {
+            @for(var i = 1; i < weeksAndResponsibles.Count; ++i) {
                 <tr>
                     <td align="right" style="width: 80px">@weeksAndResponsibles[i].WeekNumber</td>
                     <td>@weeksAndResponsibles[i].Name</td>    
                 </tr>
-			}
-        </table>
-		<input type="button" id="seeMoreRecords" value="&#9660; Vis alle &#9660;" onclick="moreClick()">
-        <input type="button" id="seeLessRecords" value="&#9650; Vis de 5 neste &#9650;" onclick="lessClick()">
-
+            }
+            </table>
+            <input type="button" id="seeMoreRecords" value="&#9660; Vis alle &#9660;" onclick="moreClick()">
+            <input type="button" id="seeLessRecords" value="&#9650; Vis de 5 neste &#9650;" onclick="lessClick()">
+	    }
+		
 		<!-- Comics -->
-		<img src="@ViewData["LatestComic"]" align="center" style="width:100%;margin:1vw;"/>
-
+		@if(ViewData["LatestComic"] != null) {
+            <img src="@ViewData["LatestComic"]" align="center" style="width:100%;margin:1vw;"/>
+		}
+        
         <!-- Show and hide rows -->
 		<script type="text/javascript" src="js/show-and-hide-rows.js"></script>
     </body>

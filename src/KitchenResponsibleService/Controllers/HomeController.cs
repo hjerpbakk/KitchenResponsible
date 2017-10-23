@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KitchenResponsibleService.Clients;
 using KitchenResponsibleService.Services;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -14,53 +16,61 @@ namespace KitchenResponsibleService.Controllers
         readonly KitchenService kitchenService;
         readonly IMemoryCache memoryCache;
         readonly ComicsClient comicsClient;
+        readonly TelemetryClient telemetryClient;
 
-        public HomeController(KitchenService kitchenService, IMemoryCache memoryCache, ComicsClient comicsClient)
+        public HomeController(KitchenService kitchenService, IMemoryCache memoryCache, ComicsClient comicsClient, TelemetryClient telemetryClient)
         {
             this.kitchenService = kitchenService;
             this.memoryCache = memoryCache;
             this.comicsClient = comicsClient;
+            this.telemetryClient = telemetryClient;
         }
 
         // TODO: Show/Hide button is ridiculously ugly, half transparent last row or something must be better
         public async Task<IActionResult> Index()
         {
-            try
-            {
 #if DEBUG
-                return await GetWebsite();
+                return (await GetWebsite()).view;
 #else
                 return await GetWebsiteFromCacheIfFilled();
 #endif
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
 
         async Task<IActionResult> GetWebsiteFromCacheIfFilled() {
 			if (!memoryCache.TryGetValue(Keys.KitchenResponsibleWebsite, out ViewResult view))
 			{
-                view = await GetWebsite();
-				var cacheEntryOptions = new MemoryCacheEntryOptions()
-					.SetAbsoluteExpiration(TimeSpan.FromMinutes(59));
+                var site = await GetWebsite();
+                view = site.view;
+                if (site.cache) {
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(59));
 
-				memoryCache.Set(Keys.KitchenResponsibleWebsite, view, cacheEntryOptions);
+                    memoryCache.Set(Keys.KitchenResponsibleWebsite, view, cacheEntryOptions);
+                }
 			}
 
             return view;
         }
 
-        async Task<ViewResult> GetWebsite() {
-            // TODO: Graceful degredation
-			var weeksAndResponsiblesTask = kitchenService.GetWeeksAndResponsibles();
-			var getLatestComicTask = comicsClient.GetLatestComicAsync();
-			await Task.WhenAll(weeksAndResponsiblesTask, getLatestComicTask);
-			var weeksAndResponsibles = weeksAndResponsiblesTask.Result;
-			ViewData["WeeksAndResponsibles"] = weeksAndResponsibles.ToList();
-            ViewData["LatestComic"] = getLatestComicTask.Result;
-			return View();
+        async Task<(ViewResult view, bool cache)> GetWebsite() {
+            bool shouldCache = await GetPartOfWebsiteData(kitchenService.GetWeeksAndResponsibles(), "WeeksAndResponsibles");
+            shouldCache &= await GetPartOfWebsiteData(comicsClient.GetLatestComicAsync(), "LatestComic");
+            return (View(), shouldCache);
         } 
+
+        async Task<bool> GetPartOfWebsiteData<T>(Task<T> fetcher, string viewDataName) {
+            try
+            {
+                ViewData[viewDataName] = await fetcher;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var properties = new Dictionary<string, string> { { "Part of website", viewDataName } };
+                telemetryClient.TrackException(ex, properties);
+                ViewData[viewDataName] = null;
+                return false;
+            }
+        }
     }
 }
