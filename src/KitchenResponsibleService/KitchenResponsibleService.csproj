@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/33ce3627-590f-4187-b3f9-5127ea1f6b5a/resourcegroups/dipsbot/providers/microsoft.insights/components/dips-trondheim-kitchen-responsible-service</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/33ce3627-590f-4187-b3f9-5127ea1f6b5a/resourcegroups/dipsbot/providers/microsoft.insights/components/dips-trondheim-kitchen-responsible-service</ApplicationInsightsAnnotationResourceId>
+    <ReleaseVersion>1.0.0.0</ReleaseVersion>
+	<Version>1.0.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
