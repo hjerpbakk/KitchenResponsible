@@ -19,8 +19,6 @@ namespace KitchenResponsibleService
             BuildWebHost(args).Run();
         }
 
-        // TODO: Ser ikke ut til at Insights funker sånn kjempebra...
-        // TODO: Trenger også en måte å rapoortere exceptions på...
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
