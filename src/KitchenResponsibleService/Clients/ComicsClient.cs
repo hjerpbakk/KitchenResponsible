@@ -17,8 +17,8 @@ namespace KitchenResponsibleService.Clients
         }
 
         string ServiceURL { get { return readOnlyAppConfiguration.ComicsServiceURL + "comics/"; } }
-        
-        public async Task<string> GetLatestComicAsync() => 
+
+        public async Task<string> GetLatestComicAsync() =>
             await httpClient.GetStringAsync(ServiceURL);
     }
 }
