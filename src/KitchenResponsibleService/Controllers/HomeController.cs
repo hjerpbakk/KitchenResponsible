@@ -22,15 +22,21 @@ namespace KitchenResponsibleService.Controllers
             this.comicsClient = comicsClient;
         }
 
+        // TODO: Show/Hide button is ridiculously ugly, half transparent last row or something must be better
         public async Task<IActionResult> Index()
         {
+            try
+            {
 #if DEBUG
-            return await GetWebsite();
+                return await GetWebsite();
 #else
-            return await GetWebsiteFromCacheIfFilled();
+                return await GetWebsiteFromCacheIfFilled();
 #endif
-            // TODO: Show/Hide button is ridiculously ugly, half transparent last row or something must be better
-            // TODO: iPad app to enable proper fullscreen and service discovery
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         async Task<IActionResult> GetWebsiteFromCacheIfFilled() {
@@ -47,6 +53,7 @@ namespace KitchenResponsibleService.Controllers
         }
 
         async Task<ViewResult> GetWebsite() {
+            // TODO: Graceful degredation
 			var weeksAndResponsiblesTask = kitchenService.GetWeeksAndResponsibles();
 			var getLatestComicTask = comicsClient.GetLatestComicAsync();
 			await Task.WhenAll(weeksAndResponsiblesTask, getLatestComicTask);
