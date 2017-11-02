@@ -26,6 +26,7 @@ namespace KitchenResponsibleService.Controllers
             this.telemetryClient = telemetryClient;
         }
 
+        // TODO: Hva skjer når comic plutselig ikke vises lenger, selv når den funker fra localhost?
         // TODO: Show/Hide button is ridiculously ugly, half transparent last row or something must be better
         public async Task<IActionResult> Index()
         {
