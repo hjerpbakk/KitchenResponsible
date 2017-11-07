@@ -27,7 +27,7 @@ namespace KitchenResponsibleService.Clients
 
         public async Task SetComicServiceURL(string ip = null) {
             string comicsURL;
-            if (ip == null) {
+            if (string.IsNullOrEmpty(ip)) {
                 var service = await httpClient.GetStringAsync(configuration.ServiceDiscoveryURL + ComicService);
                 comicsURL = JsonConvert.DeserializeObject<Service>(service).IP;
             } else {
