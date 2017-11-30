@@ -10,17 +10,17 @@ namespace KitchenResponsibleService.Clients
     public class ComicsClient
     {
         readonly HttpClient httpClient;
-        readonly IReadOnlyAppConfiguration readOnlyAppConfiguration;  
+        readonly IComicsConfiguration comicsConfiguration;  
         readonly TelemetryClient telemetryClient;
 
-        public ComicsClient(HttpClient httpClient, IReadOnlyAppConfiguration readOnlyAppConfiguration, TelemetryClient telemetryClient)
+        public ComicsClient(HttpClient httpClient, IComicsConfiguration comicsConfiguration, TelemetryClient telemetryClient)
         {
             this.httpClient = httpClient;
-            this.readOnlyAppConfiguration = readOnlyAppConfiguration;
+            this.comicsConfiguration = comicsConfiguration;
             this.telemetryClient = telemetryClient;
         }
 
-        string ServiceURL { get { return readOnlyAppConfiguration.ComicsServiceURL + "comics/"; } }
+        string ServiceURL { get { return comicsConfiguration.ComicsServiceURL + "comics/"; } }
 
         public async Task<string> GetLatestComicAsync() {
             try

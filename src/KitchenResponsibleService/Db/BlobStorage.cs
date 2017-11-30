@@ -23,11 +23,11 @@ namespace KitchenResponsibleService.Db
         readonly CloudBlobContainer kitchenContainer;
         readonly CloudBlobContainer employeesContainer;
 
-        public BlobStorage(IReadOnlyAppConfiguration configuration)
+        public BlobStorage(IBlobStorageConfiguration configuration)
         {
             employeeExtension = EmployeeExtension.ToCharArray();
 
-            var storageAccount = CloudStorageAccount.Parse(configuration.ConnectionString);
+            var storageAccount = CloudStorageAccount.Parse(configuration.BlobStorageConnectionString);
 
             blobClient = storageAccount.CreateCloudBlobClient();
 

@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Hjerpbakk.ServiceDiscovery.Client;
 
 namespace KitchenResponsibleService
 {
@@ -40,17 +41,16 @@ namespace KitchenResponsibleService
             var httpClient = new HttpClient {
                 Timeout = TimeSpan.FromSeconds(15D)
             };
-            var serviceDiscoveryClient = new ServiceDiscoveryClient(httpClient, configuration);
-            serviceDiscoveryClient.SetComicServiceURL().GetAwaiter();
+            var serviceDiscoveryClient = new ServiceDiscoveryClient(httpClient, configuration.ServiceDiscoveryURL);
+            configuration.ComicsServiceURL = serviceDiscoveryClient.GetServiceURL(configuration.ComicsServiceName).GetAwaiter().GetResult();
 
-            services.AddSingleton<IReadOnlyAppConfiguration>(configuration);
+            services.AddSingleton<IComicsConfiguration>(configuration);
+            services.AddSingleton<IBlobStorageConfiguration>(configuration);
             services.AddSingleton<IStorage, BlobStorage>();
             services.AddSingleton(serviceDiscoveryClient);
             services.AddSingleton<KitchenService>();
             services.AddSingleton(httpClient);
             services.AddSingleton<ComicsClient>();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

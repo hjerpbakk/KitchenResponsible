@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/33ce3627-590f-4187-b3f9-5127ea1f6b5a/resourcegroups/dipsbot/providers/microsoft.insights/components/dips-trondheim-kitchen-responsible-service</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/33ce3627-590f-4187-b3f9-5127ea1f6b5a/resourcegroups/dipsbot/providers/microsoft.insights/components/dips-trondheim-kitchen-responsible-service</ApplicationInsightsAnnotationResourceId>
-    <ReleaseVersion>1.0.1.0</ReleaseVersion>
-	<Version>1.0.1.0</Version>
+    <ReleaseVersion>1.0.2.0</ReleaseVersion>
+	<Version>1.0.2.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -20,10 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.5.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.6.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
@@ -35,5 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Hjerpbakk.ServiceDiscovery.Client">
+      <HintPath>..\..\lib\Hjerpbakk.ServiceDiscovery.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

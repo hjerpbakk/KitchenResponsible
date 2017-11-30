@@ -1,6 +1,5 @@
 ﻿{
-  "BlobStorageAccessKey": "[blobStorageAccessKey]",
-  "BlobStorageAccountName": "[blobStorageAccountName]",
-  "BlobStorageEndpointSuffix": "[endpointSuffix]",
-  "ServiceDiscoveryURL": "[ServiceDiscoveryURL]"
+  "BlobStorageConnectionString": "[blobStorageAccessKey]",
+  "ServiceDiscoveryURL": "[ServiceDiscoveryURL]",
+  "ComicsServiceName": "[ComicsServiceName]"
 }
