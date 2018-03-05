@@ -41,7 +41,7 @@ namespace KitchenResponsibleService
             var httpClient = new HttpClient {
                 Timeout = TimeSpan.FromSeconds(15D)
             };
-            var serviceDiscoveryClient = new ServiceDiscoveryClient(httpClient, configuration.ServiceDiscoveryURL);
+            var serviceDiscoveryClient = new ServiceDiscoveryClient(httpClient, configuration.ServiceDiscoveryUrl, configuration.ApiKey);
             configuration.ComicsServiceURL = serviceDiscoveryClient.GetServiceURL(configuration.ComicsServiceName).GetAwaiter().GetResult();
 
             services.AddSingleton<IComicsConfiguration>(configuration);

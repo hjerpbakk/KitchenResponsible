@@ -1,5 +1,6 @@
 ﻿{
   "BlobStorageConnectionString": "[blobStorageAccessKey]",
   "ServiceDiscoveryURL": "[ServiceDiscoveryURL]",
+  "ApiKey": "[ApiKey]",
   "ComicsServiceName": "[ComicsServiceName]"
 }

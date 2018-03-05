@@ -1,8 +1,9 @@
 namespace KitchenResponsibleService.Configuration
 {
-    public class AppConfiguration : IBlobStorageConfiguration, IComicsConfiguration
+    public class AppConfiguration : IBlobStorageConfiguration, IComicsConfiguration, IServiceDiscoveryConfiguration
     {
-        public string ServiceDiscoveryURL { get; set; }
+        public string ServiceDiscoveryUrl { get; set; }
+        public string ApiKey { get; set; }
 
         public string ComicsServiceURL { get; set; }
         public string ComicsServiceName { get; set; }
